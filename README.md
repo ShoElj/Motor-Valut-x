@@ -1,6 +1,5 @@
 # MotorVault  मोटरVault
 
-![MotorVault Logo](https://i.imgur.com/your-logo-url.png) <!-- You can replace this with the URL of the logo I'm providing -->
 
 **MotorVault is a professional, private inventory management system designed specifically for car dealerships. It provides a secure, modern dashboard to manage a complete vehicle inventory with ease.**
 
