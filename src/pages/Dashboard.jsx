@@ -4,17 +4,19 @@ import { auth, db } from '../firebase/config';
 import { signOut } from 'firebase/auth';
 import { collection, addDoc, serverTimestamp, query, onSnapshot, orderBy, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 
-// Import Material UI components and Icons
+// Import Material UI components, hooks, and Icons
 import {
     AppBar, Toolbar, Typography, Button, Container, Grid, Paper, Box, TextField, Alert,
     Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress,
     createTheme, ThemeProvider, CssBaseline, IconButton, Dialog, DialogActions, DialogContent,
-    DialogContentText, DialogTitle, Select, MenuItem, FormControl, InputLabel, Chip
+    DialogContentText, DialogTitle, Select, MenuItem, FormControl, InputLabel, Chip,
+    Drawer, useMediaQuery // New responsive tools
 } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import MenuIcon from '@mui/icons-material/Menu'; // New menu icon
 
 const darkTheme = createTheme({
   palette: {
@@ -28,8 +30,14 @@ const darkTheme = createTheme({
   typography: { fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif', h5: { fontWeight: 600 } },
 });
 
+const drawerWidth = 240; // Define a standard width for the sidebar
+
 function Dashboard() {
   const navigate = useNavigate();
+
+  // --- RESPONSIVE STATE ---
+  const isMobile = useMediaQuery(darkTheme.breakpoints.down('md')); // Check if screen is mobile-sized
+  const [mobileOpen, setMobileOpen] = useState(false); // State for mobile drawer
 
   // --- FORM STATE ---
   const [brand, setBrand] = useState('');
@@ -65,6 +73,10 @@ function Dashboard() {
     return () => unsubscribe();
   }, []);
 
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
   const handleLogout = async () => { await signOut(auth); navigate('/'); };
 
   const resetForm = () => {
@@ -91,16 +103,8 @@ function Dashboard() {
     }
   };
 
-  const handleEditClick = (car) => {
-    setCurrentCar(car);
-    setIsEditModalOpen(true);
-  };
-
-  const handleCloseEditModal = () => {
-    setIsEditModalOpen(false);
-    setCurrentCar(null);
-  };
-
+  const handleEditClick = (car) => { setCurrentCar(car); setIsEditModalOpen(true); };
+  const handleCloseEditModal = () => { setIsEditModalOpen(false); setCurrentCar(null); };
   const handleUpdateCar = async (e) => {
     e.preventDefault();
     if (!currentCar) return;
@@ -136,19 +140,59 @@ function Dashboard() {
     handleCloseDeleteDialog();
   };
 
+  // --- Reusable Sidebar Content ---
+  const drawerContent = (
+    <div>
+      <Toolbar sx={{ display: 'flex', justifyContent: 'center', py: 2, borderBottom: '1px solid #333' }}>
+        <Typography variant="h5" sx={{ fontWeight: 'bold' }}>Motor<span style={{ color: darkTheme.palette.primary.main }}>Vault</span></Typography>
+      </Toolbar>
+      <Box sx={{ p: 2 }}>
+        <Button fullWidth startIcon={<DashboardIcon />} sx={{ justifyContent: 'flex-start', mb: 1, color: 'primary.main', bgcolor: 'rgba(118, 255, 3, 0.1)' }}>Dashboard</Button>
+      </Box>
+    </div>
+  );
+
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <Box sx={{ display: 'flex' }}>
-        {/* Sidebar */}
-        <Box component="nav" sx={{ width: 240, flexShrink: 0, bgcolor: '#1e1e1e', minHeight: '100vh', borderRight: '1px solid #333' }}>
-          <Toolbar sx={{ display: 'flex', justifyContent: 'center', py: 2, borderBottom: '1px solid #333' }}><Typography variant="h5" sx={{ fontWeight: 'bold' }}>Motor<span style={{ color: darkTheme.palette.primary.main }}>Vault</span></Typography></Toolbar>
-          <Box sx={{ p: 2 }}><Button fullWidth startIcon={<DashboardIcon />} sx={{ justifyContent: 'flex-start', mb: 1, color: 'primary.main', bgcolor: 'rgba(118, 255, 3, 0.1)' }}>Dashboard</Button></Box>
+        {/* --- Header / App Bar --- */}
+        <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, bgcolor: '#1e1e1e' }}>
+          <Toolbar>
+            {isMobile && (
+              <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle} sx={{ mr: 2 }}>
+                <MenuIcon />
+              </IconButton>
+            )}
+            <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+              {isMobile ? `MotorVault` : `Welcome, Admin`}
+            </Typography>
+            <Button color="inherit" onClick={handleLogout} startIcon={<LogoutIcon />}>Logout</Button>
+          </Toolbar>
+        </AppBar>
+
+        {/* --- Sidebar / Drawer --- */}
+        <Box component="nav" sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}>
+          {isMobile ? (
+            <Drawer
+              variant="temporary"
+              open={mobileOpen}
+              onClose={handleDrawerToggle}
+              ModalProps={{ keepMounted: true }}
+              sx={{ '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, bgcolor: '#1e1e1e' } }}
+            >
+              {drawerContent}
+            </Drawer>
+          ) : (
+            <Drawer variant="permanent" sx={{ '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, bgcolor: '#1e1e1e' } }}>
+              {drawerContent}
+            </Drawer>
+          )}
         </Box>
 
-        {/* Main Content */}
-        <Box component="main" sx={{ flexGrow: 1, bgcolor: '#121212', p: 3, height: '100vh', overflow: 'auto' }}>
-          <AppBar position="static" color="transparent" elevation={0}><Toolbar><Typography variant="h6" sx={{ flexGrow: 1 }}>Welcome, Admin</Typography><Button color="inherit" onClick={handleLogout} startIcon={<LogoutIcon />}>Logout</Button></Toolbar></AppBar>
+        {/* --- Main Content --- */}
+        <Box component="main" sx={{ flexGrow: 1, p: 3, width: { md: `calc(100% - ${drawerWidth}px)` } }}>
+          <Toolbar /> {/* Spacer for the AppBar */}
           <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={4}>
               {/* Add Car Form */}
