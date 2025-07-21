@@ -10,13 +10,13 @@ import {
     Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress,
     createTheme, ThemeProvider, CssBaseline, IconButton, Dialog, DialogActions, DialogContent,
     DialogContentText, DialogTitle, Select, MenuItem, FormControl, InputLabel, Chip,
-    Drawer, useMediaQuery // New responsive tools
+    Drawer, useMediaQuery, Divider
 } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import MenuIcon from '@mui/icons-material/Menu'; // New menu icon
+import MenuIcon from '@mui/icons-material/Menu';
 
 const darkTheme = createTheme({
   palette: {
@@ -30,16 +30,14 @@ const darkTheme = createTheme({
   typography: { fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif', h5: { fontWeight: 600 } },
 });
 
-const drawerWidth = 240; // Define a standard width for the sidebar
+const drawerWidth = 240;
 
 function Dashboard() {
   const navigate = useNavigate();
 
-  // --- RESPONSIVE STATE ---
-  const isMobile = useMediaQuery(darkTheme.breakpoints.down('md')); // Check if screen is mobile-sized
-  const [mobileOpen, setMobileOpen] = useState(false); // State for mobile drawer
+  const isMobile = useMediaQuery(darkTheme.breakpoints.down('md'));
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  // --- FORM STATE ---
   const [brand, setBrand] = useState('');
   const [model, setModel] = useState('');
   const [year, setYear] = useState('');
@@ -52,13 +50,11 @@ function Dashboard() {
   const [transmission, setTransmission] = useState('Automatic');
   const [color, setColor] = useState('');
 
-  // --- UI & DATA STATE ---
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
   const [cars, setCars] = useState([]);
   const [carsLoading, setCarsLoading] = useState(true);
 
-  // --- EDIT & DELETE STATE ---
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [currentCar, setCurrentCar] = useState(null);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -140,7 +136,6 @@ function Dashboard() {
     handleCloseDeleteDialog();
   };
 
-  // --- Reusable Sidebar Content ---
   const drawerContent = (
     <div>
       <Toolbar sx={{ display: 'flex', justifyContent: 'center', py: 2, borderBottom: '1px solid #333' }}>
@@ -156,7 +151,6 @@ function Dashboard() {
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <Box sx={{ display: 'flex' }}>
-        {/* --- Header / App Bar --- */}
         <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, bgcolor: '#1e1e1e' }}>
           <Toolbar>
             {isMobile && (
@@ -171,16 +165,9 @@ function Dashboard() {
           </Toolbar>
         </AppBar>
 
-        {/* --- Sidebar / Drawer --- */}
         <Box component="nav" sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}>
           {isMobile ? (
-            <Drawer
-              variant="temporary"
-              open={mobileOpen}
-              onClose={handleDrawerToggle}
-              ModalProps={{ keepMounted: true }}
-              sx={{ '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, bgcolor: '#1e1e1e' } }}
-            >
+            <Drawer variant="temporary" open={mobileOpen} onClose={handleDrawerToggle} ModalProps={{ keepMounted: true }} sx={{ '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, bgcolor: '#1e1e1e' } }}>
               {drawerContent}
             </Drawer>
           ) : (
@@ -190,27 +177,26 @@ function Dashboard() {
           )}
         </Box>
 
-        {/* --- Main Content --- */}
-        <Box component="main" sx={{ flexGrow: 1, p: 3, width: { md: `calc(100% - ${drawerWidth}px)` } }}>
-          <Toolbar /> {/* Spacer for the AppBar */}
+        <Box component="main" sx={{ flexGrow: 1, p: { xs: 2, sm: 3 }, width: { md: `calc(100% - ${drawerWidth}px)` } }}>
+          <Toolbar />
           <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={4}>
-              {/* Add Car Form */}
-              <Grid item xs={12} lg={5}>
+              {/* --- CORRECTED RESPONSIVE GRID --- */}
+              <Grid item xs={12} md={5}>
                 <Paper sx={{ p: 3, borderRadius: 2, border: '1px solid #333' }}>
                   <Typography component="h2" variant="h5" color="primary" gutterBottom>Add New Car</Typography>
                   <Box component="form" onSubmit={handleAddCar} sx={{ mt: 2 }}>
                     <Grid container spacing={2}>
-                      <Grid item xs={6}><TextField fullWidth label="Brand" value={brand} onChange={e => setBrand(e.target.value)} required /></Grid>
-                      <Grid item xs={6}><TextField fullWidth label="Model" value={model} onChange={e => setModel(e.target.value)} required /></Grid>
-                      <Grid item xs={6}><TextField fullWidth label="Year" type="number" value={year} onChange={e => setYear(e.target.value)} required /></Grid>
-                      <Grid item xs={6}><TextField fullWidth label="Price (₦)" type="number" value={price} onChange={e => setPrice(e.target.value)} required /></Grid>
-                      <Grid item xs={6}><TextField fullWidth label="Mileage (km)" type="number" value={mileage} onChange={e => setMileage(e.target.value)} /></Grid>
-                      <Grid item xs={6}><TextField fullWidth label="Color" value={color} onChange={e => setColor(e.target.value)} /></Grid>
+                      <Grid item xs={12} sm={6}><TextField fullWidth label="Brand" value={brand} onChange={e => setBrand(e.target.value)} required /></Grid>
+                      <Grid item xs={12} sm={6}><TextField fullWidth label="Model" value={model} onChange={e => setModel(e.target.value)} required /></Grid>
+                      <Grid item xs={12} sm={6}><TextField fullWidth label="Year" type="number" value={year} onChange={e => setYear(e.target.value)} required /></Grid>
+                      <Grid item xs={12} sm={6}><TextField fullWidth label="Price (₦)" type="number" value={price} onChange={e => setPrice(e.target.value)} required /></Grid>
+                      <Grid item xs={12} sm={6}><TextField fullWidth label="Mileage (km)" type="number" value={mileage} onChange={e => setMileage(e.target.value)} /></Grid>
+                      <Grid item xs={12} sm={6}><TextField fullWidth label="Color" value={color} onChange={e => setColor(e.target.value)} /></Grid>
                       <Grid item xs={12}><TextField fullWidth label="VIN" value={vin} onChange={e => setVin(e.target.value)} /></Grid>
                       <Grid item xs={12}><TextField fullWidth label="Image URL" value={imageUrl} onChange={e => setImageUrl(e.target.value)} required /></Grid>
-                      <Grid item xs={6}><FormControl fullWidth><InputLabel>Condition</InputLabel><Select value={condition} label="Condition" onChange={e => setCondition(e.target.value)}><MenuItem value="Brand New">Brand New</MenuItem><MenuItem value="Tokunbo">Tokunbo</MenuItem><MenuItem value="Nigerian Used">Nigerian Used</MenuItem></Select></FormControl></Grid>
-                      <Grid item xs={6}><FormControl fullWidth><InputLabel>Transmission</InputLabel><Select value={transmission} label="Transmission" onChange={e => setTransmission(e.target.value)}><MenuItem value="Automatic">Automatic</MenuItem><MenuItem value="Manual">Manual</MenuItem></Select></FormControl></Grid>
+                      <Grid item xs={12} sm={6}><FormControl fullWidth><InputLabel>Condition</InputLabel><Select value={condition} label="Condition" onChange={e => setCondition(e.target.value)}><MenuItem value="Brand New">Brand New</MenuItem><MenuItem value="Tokunbo">Tokunbo</MenuItem><MenuItem value="Nigerian Used">Nigerian Used</MenuItem></Select></FormControl></Grid>
+                      <Grid item xs={12} sm={6}><FormControl fullWidth><InputLabel>Transmission</InputLabel><Select value={transmission} label="Transmission" onChange={e => setTransmission(e.target.value)}><MenuItem value="Automatic">Automatic</MenuItem><MenuItem value="Manual">Manual</MenuItem></Select></FormControl></Grid>
                       <Grid item xs={12}><FormControl fullWidth><InputLabel>Status</InputLabel><Select value={status} label="Status" onChange={e => setStatus(e.target.value)}><MenuItem value="For Sale">For Sale</MenuItem><MenuItem value="Sold">Sold</MenuItem></Select></FormControl></Grid>
                     </Grid>
                     {message.text && <Alert severity={message.type} sx={{ mt: 2 }}>{message.text}</Alert>}
@@ -219,27 +205,48 @@ function Dashboard() {
                 </Paper>
               </Grid>
 
-              {/* Current Inventory Table */}
-              <Grid item xs={12} lg={7}>
+              {/* --- CORRECTED RESPONSIVE GRID --- */}
+              <Grid item xs={12} md={7}>
                 <Paper sx={{ p: 2, borderRadius: 2, border: '1px solid #333' }}>
                   <Typography component="h2" variant="h5" color="primary" gutterBottom>Current Inventory</Typography>
-                  <TableContainer>
-                    {carsLoading ? <Box sx={{ display: 'flex', justifyContent: 'center', p: 5 }}><CircularProgress /></Box> :
-                    <Table size="small">
-                      <TableHead><TableRow><TableCell>Car</TableCell><TableCell>Condition</TableCell><TableCell>Price</TableCell><TableCell>Status</TableCell><TableCell align="right">Actions</TableCell></TableRow></TableHead>
-                      <TableBody>
+                  {carsLoading ? <Box sx={{ display: 'flex', justifyContent: 'center', p: 5 }}><CircularProgress /></Box> :
+                    isMobile ? (
+                      <Box>
                         {cars.map((car) => (
-                          <TableRow key={car.id} hover>
-                            <TableCell><Typography variant="body2" sx={{ fontWeight: 'bold' }}>{car.brand} {car.model}</Typography><Typography variant="caption" color="text.secondary">{car.year}</Typography></TableCell>
-                            <TableCell>{car.condition}</TableCell>
-                            <TableCell>₦{car.price?.toLocaleString()}</TableCell>
-                            <TableCell><Chip label={car.status} color={car.status === 'Sold' ? 'secondary' : 'success'} size="small" /></TableCell>
-                            <TableCell align="right"><IconButton onClick={() => handleEditClick(car)} size="small"><EditIcon fontSize="small" /></IconButton><IconButton onClick={() => handleDeleteClick(car)} color="secondary" size="small"><DeleteIcon fontSize="small" /></IconButton></TableCell>
-                          </TableRow>
+                          <Paper key={car.id} sx={{ p: 2, mb: 2, border: '1px solid #333' }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                              <Typography variant="h6" sx={{ fontWeight: 'bold' }}>{car.brand} {car.model}</Typography>
+                              <Chip label={car.status} color={car.status === 'Sold' ? 'secondary' : 'success'} size="small" />
+                            </Box>
+                            <Typography variant="body2" color="text.secondary">{car.year} • {car.condition}</Typography>
+                            <Typography variant="h6" sx={{ my: 1 }}>₦{car.price?.toLocaleString()}</Typography>
+                            <Divider sx={{ my: 1 }} />
+                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mt: 1 }}>
+                              <Button onClick={() => handleEditClick(car)} size="small" startIcon={<EditIcon />}>Edit</Button>
+                              <Button onClick={() => handleDeleteClick(car)} color="secondary" size="small" startIcon={<DeleteIcon />}>Delete</Button>
+                            </Box>
+                          </Paper>
                         ))}
-                      </TableBody>
-                    </Table>}
-                  </TableContainer>
+                      </Box>
+                    ) : (
+                      <TableContainer>
+                        <Table size="small">
+                          <TableHead><TableRow><TableCell>Car</TableCell><TableCell>Condition</TableCell><TableCell>Price</TableCell><TableCell>Status</TableCell><TableCell align="right">Actions</TableCell></TableRow></TableHead>
+                          <TableBody>
+                            {cars.map((car) => (
+                              <TableRow key={car.id} hover>
+                                <TableCell><Typography variant="body2" sx={{ fontWeight: 'bold' }}>{car.brand} {car.model}</Typography><Typography variant="caption" color="text.secondary">{car.year}</Typography></TableCell>
+                                <TableCell>{car.condition}</TableCell>
+                                <TableCell>₦{car.price?.toLocaleString()}</TableCell>
+                                <TableCell><Chip label={car.status} color={car.status === 'Sold' ? 'secondary' : 'success'} size="small" /></TableCell>
+                                <TableCell align="right"><IconButton onClick={() => handleEditClick(car)} size="small"><EditIcon fontSize="small" /></IconButton><IconButton onClick={() => handleDeleteClick(car)} color="secondary" size="small"><DeleteIcon fontSize="small" /></IconButton></TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    )
+                  }
                 </Paper>
               </Grid>
             </Grid>
@@ -248,7 +255,7 @@ function Dashboard() {
       </Box>
 
       {/* Edit Car Modal */}
-      <Dialog open={isEditModalOpen} onClose={handleCloseEditModal}>
+      <Dialog open={isEditModalOpen} onClose={handleCloseEditModal} fullScreen={isMobile}>
         <DialogTitle>Edit Car Details</DialogTitle>
         <Box component="form" onSubmit={handleUpdateCar}>
           <DialogContent>
