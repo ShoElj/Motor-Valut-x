@@ -5,8 +5,7 @@
 
 This application was built from the ground up as a robust B2B solution, allowing a dealership to track their stock, manage sales statuses, and edit vehicle details in real-time.
 
-**[🔗 Live Demo Link Here]** <!-- Add your Vercel deployment link here -->
-
+(https://motor-valut-x.vercel.app/)
 ---
 
 ## Features
@@ -40,7 +39,7 @@ To run this project locally, follow these steps:
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/your-username/motorvault.git](https://github.com/your-username/motorvault.git)
+    git clone https://github.com/ShoElj/Motor-Valut-x
     cd motorvault
     ```
 
