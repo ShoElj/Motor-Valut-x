@@ -17,6 +17,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import MenuIcon from '@mui/icons-material/Menu';
+import CheckIcon from '@mui/icons-material/Check';
 
 const darkTheme = createTheme({
   palette: {
@@ -136,6 +137,23 @@ function Dashboard() {
     handleCloseDeleteDialog();
   };
 
+  // --- New: Mark as Sold ---
+  const markAsSold = async (id) => {
+    setLoading(true);
+    try {
+      const carRef = doc(db, 'cars', id);
+      await updateDoc(carRef, { status: 'Sold' });
+      // update local state quickly so UI reflects change without waiting for snapshot
+      setCars(prevCars => prevCars.map(c => c.id === id ? { ...c, status: 'Sold' } : c));
+      setMessage({ type: 'success', text: 'Car marked as sold.' });
+    } catch (error) {
+      setMessage({ type: 'error', text: `Error marking sold: ${error.message}` });
+    } finally {
+      setLoading(false);
+    }
+  };
+  // -----------------------------
+
   const drawerContent = (
     <div>
       <Toolbar sx={{ display: 'flex', justifyContent: 'center', py: 2, borderBottom: '1px solid #333' }}>
@@ -181,7 +199,7 @@ function Dashboard() {
           <Toolbar />
           <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={4}>
-              {/* --- CORRECTED RESPONSIVE GRID --- */}
+              {/* --- Add Car Form --- */}
               <Grid item xs={12} md={5}>
                 <Paper sx={{ p: 3, borderRadius: 2, border: '1px solid #333' }}>
                   <Typography component="h2" variant="h5" color="primary" gutterBottom>Add New Car</Typography>
@@ -205,7 +223,7 @@ function Dashboard() {
                 </Paper>
               </Grid>
 
-              {/* --- CORRECTED RESPONSIVE GRID --- */}
+              {/* --- Inventory List --- */}
               <Grid item xs={12} md={7}>
                 <Paper sx={{ p: 2, borderRadius: 2, border: '1px solid #333' }}>
                   <Typography component="h2" variant="h5" color="primary" gutterBottom>Current Inventory</Typography>
@@ -216,12 +234,17 @@ function Dashboard() {
                           <Paper key={car.id} sx={{ p: 2, mb: 2, border: '1px solid #333' }}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
                               <Typography variant="h6" sx={{ fontWeight: 'bold' }}>{car.brand} {car.model}</Typography>
-                              <Chip label={car.status} color={car.status === 'Sold' ? 'secondary' : 'success'} size="small" />
+                              <Chip label={car.status || 'For Sale'} color={car.status === 'Sold' ? 'secondary' : 'success'} size="small" />
                             </Box>
                             <Typography variant="body2" color="text.secondary">{car.year} • {car.condition}</Typography>
-                            <Typography variant="h6" sx={{ my: 1 }}>₦{car.price?.toLocaleString()}</Typography>
+                            <Typography variant="h6" sx={{ my: 1 }}>
+                              {car.status === 'Sold' ? <span style={{ textDecoration: 'line-through', color: 'gray' }}>₦{car.price?.toLocaleString()}</span> : `₦${car.price?.toLocaleString()}`}
+                            </Typography>
                             <Divider sx={{ my: 1 }} />
                             <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mt: 1 }}>
+                              {car.status === 'For Sale' && (
+                                <Button onClick={() => markAsSold(car.id)} size="small" variant="contained" color="success" startIcon={<CheckIcon />}>Mark as Sold</Button>
+                              )}
                               <Button onClick={() => handleEditClick(car)} size="small" startIcon={<EditIcon />}>Edit</Button>
                               <Button onClick={() => handleDeleteClick(car)} color="secondary" size="small" startIcon={<DeleteIcon />}>Delete</Button>
                             </Box>
@@ -235,11 +258,22 @@ function Dashboard() {
                           <TableBody>
                             {cars.map((car) => (
                               <TableRow key={car.id} hover>
-                                <TableCell><Typography variant="body2" sx={{ fontWeight: 'bold' }}>{car.brand} {car.model}</Typography><Typography variant="caption" color="text.secondary">{car.year}</Typography></TableCell>
+                                <TableCell>
+                                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>{car.brand} {car.model}</Typography>
+                                  <Typography variant="caption" color="text.secondary">{car.year}</Typography>
+                                </TableCell>
                                 <TableCell>{car.condition}</TableCell>
-                                <TableCell>₦{car.price?.toLocaleString()}</TableCell>
-                                <TableCell><Chip label={car.status} color={car.status === 'Sold' ? 'secondary' : 'success'} size="small" /></TableCell>
-                                <TableCell align="right"><IconButton onClick={() => handleEditClick(car)} size="small"><EditIcon fontSize="small" /></IconButton><IconButton onClick={() => handleDeleteClick(car)} color="secondary" size="small"><DeleteIcon fontSize="small" /></IconButton></TableCell>
+                                <TableCell>{car.status === 'Sold' ? <span style={{ textDecoration: 'line-through', color: 'gray' }}>₦{car.price?.toLocaleString()}</span> : `₦${car.price?.toLocaleString()}`}</TableCell>
+                                <TableCell><Chip label={car.status || 'For Sale'} color={car.status === 'Sold' ? 'secondary' : 'success'} size="small" /></TableCell>
+                                <TableCell align="right">
+                                  {car.status === 'For Sale' && (
+                                    <IconButton onClick={() => markAsSold(car.id)} size="small" color="success" sx={{ mr: 1 }}>
+                                      <CheckIcon fontSize="small" />
+                                    </IconButton>
+                                  )}
+                                  <IconButton onClick={() => handleEditClick(car)} size="small"><EditIcon fontSize="small" /></IconButton>
+                                  <IconButton onClick={() => handleDeleteClick(car)} color="secondary" size="small"><DeleteIcon fontSize="small" /></IconButton>
+                                </TableCell>
                               </TableRow>
                             ))}
                           </TableBody>
