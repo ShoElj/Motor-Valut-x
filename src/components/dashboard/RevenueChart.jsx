@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Paper, Typography, Box, Grid, useMediaQuery } from '@mui/material';
+import { Paper, Typography, Box, useMediaQuery } from '@mui/material';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, BarChart, Bar,
@@ -57,7 +57,7 @@ export default function RevenueChart({ cars }) {
     : `₦${v}`;
 
   return (
-    <Paper sx={{ p: 3, borderRadius: 3 }}>
+    <Paper sx={{ p: { xs: 2.5, sm: 3 }, borderRadius: 3, minHeight: 520 }}>
       {/* Header */}
       <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', mb: 3, flexWrap: 'wrap', gap: 2 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -85,7 +85,7 @@ export default function RevenueChart({ cars }) {
       </Box>
 
       {/* Area chart — revenue */}
-      <ResponsiveContainer width="100%" height={220}>
+      <ResponsiveContainer width="100%" height={260}>
         <AreaChart data={chartData} margin={{ top: 8, right: 8, left: isMobile ? -16 : 8, bottom: 0 }}>
           <defs>
             <linearGradient id="revenueGrad" x1="0" y1="0" x2="0" y2="1">
@@ -124,7 +124,7 @@ export default function RevenueChart({ cars }) {
         <Box sx={{ width: 3, height: 16, bgcolor: '#f50057', borderRadius: 2 }} />
         <Typography sx={{ fontWeight: 600, fontSize: '0.85rem', color: '#ccc' }}>Cars Sold per Month</Typography>
       </Box>
-      <ResponsiveContainer width="100%" height={150}>
+      <ResponsiveContainer width="100%" height={180}>
         <BarChart data={chartData} margin={{ top: 4, right: 8, left: isMobile ? -16 : 8, bottom: 0 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
           <XAxis

@@ -76,22 +76,23 @@ function SectionHeader({ title, right, subtle = false, compact = false }) {
 function CarFormFields({ data, onChange, isEdit = false }) {
   const set = (key) => (e) => onChange(prev => ({ ...prev, [key]: e.target.value }));
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2.25}>
       <Grid item xs={12}>
         <ImageUpload
           value={{ imageUrl: data.imageUrl || '', imagePath: data.imagePath || '' }}
           onChange={({ imageUrl, imagePath }) => onChange(prev => ({ ...prev, imageUrl, imagePath }))}
+          size="100%"
         />
       </Grid>
-      <Grid item xs={6}><TextField fullWidth label="Brand" value={data.brand || ''} onChange={set('brand')} required /></Grid>
-      <Grid item xs={6}><TextField fullWidth label="Model" value={data.model || ''} onChange={set('model')} required /></Grid>
-      <Grid item xs={6}><TextField fullWidth label="Year" type="number" value={data.year || ''} onChange={set('year')} required /></Grid>
-      <Grid item xs={6}><TextField fullWidth label="Color" value={data.color || ''} onChange={set('color')} /></Grid>
-      <Grid item xs={6}><TextField fullWidth label="Price (₦)" type="number" value={data.price || ''} onChange={set('price')} required /></Grid>
-      <Grid item xs={6}><TextField fullWidth label="Cost Price (₦)" type="number" value={data.costPrice || ''} onChange={set('costPrice')} /></Grid>
-      <Grid item xs={6}><TextField fullWidth label="Mileage (km)" type="number" value={data.mileage || ''} onChange={set('mileage')} /></Grid>
-      <Grid item xs={6}><TextField fullWidth label="VIN" value={data.vin || ''} onChange={set('vin')} /></Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} sm={6}><TextField fullWidth label="Brand" value={data.brand || ''} onChange={set('brand')} required /></Grid>
+      <Grid item xs={12} sm={6}><TextField fullWidth label="Model" value={data.model || ''} onChange={set('model')} required /></Grid>
+      <Grid item xs={12} sm={6}><TextField fullWidth label="Year" type="number" value={data.year || ''} onChange={set('year')} required /></Grid>
+      <Grid item xs={12} sm={6}><TextField fullWidth label="Color" value={data.color || ''} onChange={set('color')} /></Grid>
+      <Grid item xs={12} sm={6}><TextField fullWidth label="Price (₦)" type="number" value={data.price || ''} onChange={set('price')} required /></Grid>
+      <Grid item xs={12} sm={6}><TextField fullWidth label="Cost Price (₦)" type="number" value={data.costPrice || ''} onChange={set('costPrice')} /></Grid>
+      <Grid item xs={12} sm={6}><TextField fullWidth label="Mileage (km)" type="number" value={data.mileage || ''} onChange={set('mileage')} /></Grid>
+      <Grid item xs={12} sm={6}><TextField fullWidth label="VIN" value={data.vin || ''} onChange={set('vin')} /></Grid>
+      <Grid item xs={12} sm={6}>
         <FormControl fullWidth>
           <InputLabel>Condition</InputLabel>
           <Select value={data.condition || 'Tokunbo'} label="Condition" onChange={set('condition')}>
@@ -101,7 +102,7 @@ function CarFormFields({ data, onChange, isEdit = false }) {
           </Select>
         </FormControl>
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} sm={6}>
         <FormControl fullWidth>
           <InputLabel>Transmission</InputLabel>
           <Select value={data.transmission || 'Automatic'} label="Transmission" onChange={set('transmission')}>
@@ -342,12 +343,12 @@ function Dashboard() {
                   <RevenueChart cars={cars} />
                 </Grid>
                 {/* Aged stock — full width on mobile, half on desktop */}
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} lg={5}>
                   <AgedStock cars={cars} />
                 </Grid>
                 {/* Profit summary panel */}
-                <Grid item xs={12} md={6}>
-                  <Paper sx={{ p: 3, borderRadius: 3, height: '100%' }}>
+                <Grid item xs={12} lg={7}>
+                  <Paper sx={{ p: { xs: 2.5, sm: 3 }, borderRadius: 3, height: '100%' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
                       <Box sx={{ width: 3, height: 20, bgcolor: '#76ff03', borderRadius: 2 }} />
                       <Typography variant="h6">Profit Summary</Typography>
@@ -361,11 +362,12 @@ function Dashboard() {
                         { label: 'Total Revenue', value: `₦${stats.totalRevenue.toLocaleString()}`, color: '#40c4ff' },
                         { label: 'Total Profit', value: `₦${(stats.totalProfit || 0).toLocaleString()}`, color: '#76ff03' },
                       ].map(({ label, value, color }) => (
-                        <Grid item xs={6} key={label}>
+                        <Grid item xs={12} sm={6} md={4} key={label}>
                           <Box sx={{
-                            p: 2, borderRadius: 2,
+                            p: 2, borderRadius: 2.25,
                             bgcolor: 'rgba(255,255,255,0.02)',
-                            border: '1px solid rgba(255,255,255,0.05)',
+                            border: '1px solid rgba(255,255,255,0.06)',
+                            minHeight: 86,
                           }}>
                             <Typography sx={{ fontSize: '0.68rem', color: '#555', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 700, mb: 0.75 }}>
                               {label}
@@ -609,7 +611,7 @@ function Dashboard() {
         fullScreen={isMobile} maxWidth="sm" fullWidth>
         <DialogTitle sx={{ fontWeight: 700, borderBottom: '1px solid rgba(255,255,255,0.06)', pb: 1.5 }}>Edit Car</DialogTitle>
         <Box component="form" onSubmit={handleUpdateCar}>
-          <DialogContent sx={{ pt: 1 }}>
+          <DialogContent sx={{ pt: 1.5 }}>
             <CarFormFields data={currentCar || {}} onChange={setCurrentCar} isEdit />
           </DialogContent>
           <DialogActions sx={{ px: 3, pb: 2, borderTop: '1px solid rgba(255,255,255,0.05)' }}>

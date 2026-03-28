@@ -69,13 +69,13 @@ export default function ImageUpload({ value, onChange, disabled = false, size = 
         sx={{
           position: 'relative',
           ...zoneStyles,
-          borderRadius: '12px',
+          borderRadius: '14px',
           border: dragging
-            ? '1.5px dashed #76ff03'
+            ? '1.5px dashed rgba(118,255,3,0.85)'
             : previewUrl
-              ? '1.5px solid rgba(255,255,255,0.1)'
-              : '1.5px dashed rgba(255,255,255,0.1)',
-          bgcolor: dragging ? 'rgba(118,255,3,0.04)' : '#0e0e0e',
+              ? '1.5px solid rgba(255,255,255,0.12)'
+              : '1.5px dashed rgba(255,255,255,0.14)',
+          bgcolor: dragging ? 'rgba(118,255,3,0.05)' : 'rgba(255,255,255,0.01)',
           overflow: 'hidden',
           cursor: disabled || uploading ? 'default' : 'pointer',
           transition: 'border-color 0.18s, background 0.18s, box-shadow 0.18s, transform 0.18s',
@@ -97,10 +97,10 @@ export default function ImageUpload({ value, onChange, disabled = false, size = 
             {!disabled && !uploading && (
               <Box sx={{
                 position: 'absolute', inset: 0,
-                bgcolor: 'rgba(0,0,0,0)',
+                bgcolor: 'rgba(0,0,0,0.05)',
                 transition: 'background 0.18s',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                '&:hover': { bgcolor: 'rgba(0,0,0,0.5)' },
+                '&:hover': { bgcolor: 'rgba(0,0,0,0.55)' },
                 '&:hover .remove-btn': { opacity: 1 },
               }}>
                 <Tooltip title="Remove image">
@@ -120,9 +120,9 @@ export default function ImageUpload({ value, onChange, disabled = false, size = 
         ) : (
           <Box sx={{ textAlign: 'center', px: 2, pointerEvents: 'none' }}>
             <Box sx={{
-              width: 40, height: 40, borderRadius: '50%',
-              bgcolor: 'rgba(118,255,3,0.07)',
-              border: '1px solid rgba(118,255,3,0.14)',
+              width: 44, height: 44, borderRadius: '12px',
+              bgcolor: 'rgba(118,255,3,0.08)',
+              border: '1px solid rgba(118,255,3,0.22)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               mx: 'auto', mb: 1.25,
             }}>
@@ -140,7 +140,7 @@ export default function ImageUpload({ value, onChange, disabled = false, size = 
 
       {uploading && (
         <Box sx={{ width: '100%', mt: 1 }}>
-          <LinearProgress variant="determinate" value={progress} />
+          <LinearProgress variant="determinate" value={progress} sx={{ height: 5, borderRadius: 10 }} />
           <Typography sx={{ fontSize: '0.68rem', color: '#555', mt: 0.5, display: 'block', textAlign: 'center' }}>
             {progress}%
           </Typography>

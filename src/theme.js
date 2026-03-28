@@ -184,7 +184,7 @@ const darkTheme = createTheme({
           paddingInline: 16,
         },
         sizeSmall:  { fontSize: '0.78rem', padding: '5px 12px',  minHeight: 30 },
-        sizeMedium: { fontSize: '0.85rem', padding: '7px 16px',  minHeight: 36 },
+        sizeMedium: { fontSize: '0.85rem', padding: `${SPACE_1 - 1}px ${SPACE_3}px`,  minHeight: 36 },
         sizeLarge:  { fontSize: '0.92rem', padding: '10px 24px', minHeight: 44 },
 
         contained: {
@@ -237,8 +237,21 @@ const darkTheme = createTheme({
           },
           '&.Mui-disabled': { opacity: 0.35 },
         },
-        sizeSmall:  { padding: 6 },
-        sizeMedium: { padding: 8 },
+        sizeSmall:  { padding: SPACE_1 - 2 },
+        sizeMedium: { padding: SPACE_1 },
+      },
+    },
+    MuiAvatar: {
+      styleOverrides: {
+        root: {
+          borderRadius: RADIUS_SM,
+          backgroundColor: alpha('#fff', 0.03),
+          border: `1px solid ${alpha('#fff', 0.08)}`,
+          color: TEXT_SECONDARY,
+          width: 32,
+          height: 32,
+          fontSize: '0.9rem',
+        },
       },
     },
     MuiAvatar: {
@@ -270,8 +283,8 @@ const darkTheme = createTheme({
           '&.Mui-error fieldset': { borderColor: RED },
           '&.Mui-disabled': { opacity: 0.5 },
         },
-        input: { padding: '8px 12px' },
-        inputSizeSmall: { padding: '7px 12px' },
+        input: { padding: `${SPACE_1}px ${SPACE_2}px` },
+        inputSizeSmall: { padding: `${SPACE_1 - 1}px ${SPACE_2}px` },
       },
     },
     MuiInputLabel: {
@@ -304,10 +317,10 @@ const darkTheme = createTheme({
             letterSpacing: '0.1em',
             color: TEXT_MUTED,
             borderBottom: `1px solid ${BORDER_SOFT}`,
-            paddingTop: 10,
-            paddingBottom: 10,
-            paddingLeft: 16,
-            paddingRight: 16,
+            paddingTop: SPACE_2 - 2,
+            paddingBottom: SPACE_2 - 2,
+            paddingLeft: SPACE_3,
+            paddingRight: SPACE_3,
             backgroundColor: BG_INSET,
           },
         },
@@ -322,10 +335,10 @@ const darkTheme = createTheme({
           },
           '& .MuiTableCell-root': {
             borderBottom: `1px solid rgba(255,255,255,0.035)`,
-            paddingTop: 13,
-            paddingBottom: 13,
-            paddingLeft: 16,
-            paddingRight: 16,
+            paddingTop: SPACE_2,
+            paddingBottom: SPACE_2,
+            paddingLeft: SPACE_3,
+            paddingRight: SPACE_3,
             fontSize: '0.875rem',
           },
         },
@@ -368,7 +381,7 @@ const darkTheme = createTheme({
         root: {
           fontSize: '1rem',
           fontWeight: 700,
-          paddingBottom: 8,
+          paddingBottom: SPACE_1,
           color: TEXT_PRIMARY,
         },
       },
@@ -380,7 +393,7 @@ const darkTheme = createTheme({
     },
     MuiDialogActions: {
       styleOverrides: {
-        root: { padding: '12px 20px 16px', gap: 8 },
+        root: { padding: `${SPACE_2}px ${SPACE_4}px ${SPACE_3}px`, gap: SPACE_1 },
       },
     },
 
