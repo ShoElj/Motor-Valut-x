@@ -343,12 +343,12 @@ function Dashboard() {
                   <RevenueChart cars={cars} />
                 </Grid>
                 {/* Aged stock — full width on mobile, half on desktop */}
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} lg={5}>
                   <AgedStock cars={cars} />
                 </Grid>
                 {/* Profit summary panel */}
-                <Grid item xs={12} md={6}>
-                  <Paper sx={{ p: 3, borderRadius: 3, height: '100%' }}>
+                <Grid item xs={12} lg={7}>
+                  <Paper sx={{ p: { xs: 2.5, sm: 3 }, borderRadius: 3, height: '100%' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
                       <Box sx={{ width: 3, height: 20, bgcolor: '#76ff03', borderRadius: 2 }} />
                       <Typography variant="h6">Profit Summary</Typography>
@@ -362,11 +362,12 @@ function Dashboard() {
                         { label: 'Total Revenue', value: `₦${stats.totalRevenue.toLocaleString()}`, color: '#40c4ff' },
                         { label: 'Total Profit', value: `₦${(stats.totalProfit || 0).toLocaleString()}`, color: '#76ff03' },
                       ].map(({ label, value, color }) => (
-                        <Grid item xs={6} key={label}>
+                        <Grid item xs={12} sm={6} md={4} key={label}>
                           <Box sx={{
-                            p: 2, borderRadius: 2,
+                            p: 2, borderRadius: 2.25,
                             bgcolor: 'rgba(255,255,255,0.02)',
-                            border: '1px solid rgba(255,255,255,0.05)',
+                            border: '1px solid rgba(255,255,255,0.06)',
+                            minHeight: 86,
                           }}>
                             <Typography sx={{ fontSize: '0.68rem', color: '#555', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 700, mb: 0.75 }}>
                               {label}

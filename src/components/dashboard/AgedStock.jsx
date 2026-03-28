@@ -22,9 +22,9 @@ export default function AgedStock({ cars }) {
     .sort((a, b) => b.days - a.days);
 
   return (
-    <Paper sx={{ p: 3, borderRadius: 3, height: '100%', border: aged.length > 0 ? '1px solid rgba(255,171,64,0.15)' : '1px solid rgba(255,255,255,0.06)' }}>
+    <Paper sx={{ p: { xs: 2.5, sm: 3 }, borderRadius: 3, height: '100%', border: aged.length > 0 ? '1px solid rgba(255,171,64,0.2)' : '1px solid rgba(255,255,255,0.06)' }}>
       {/* Header */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2.5 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.75 }}>
         <WarningAmberIcon sx={{ color: aged.length > 0 ? '#ffab40' : '#444', fontSize: 18 }} />
         <Typography variant="h6" sx={{ lineHeight: 1 }}>Aged Stock</Typography>
         {aged.length > 0 && (
@@ -49,6 +49,11 @@ export default function AgedStock({ cars }) {
         </Box>
       ) : (
         <>
+          <Box sx={{ mb: 2, p: 1.25, borderRadius: 2, bgcolor: 'rgba(255,171,64,0.06)', border: '1px solid rgba(255,171,64,0.16)' }}>
+            <Typography sx={{ fontSize: '0.72rem', color: '#ffab40', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 700 }}>
+              Attention needed
+            </Typography>
+          </Box>
           <Typography variant="caption" sx={{ color: '#555', display: 'block', mb: 2.5, lineHeight: 1.6 }}>
             These vehicles have been in stock over 30 days. Consider reviewing pricing.
           </Typography>
