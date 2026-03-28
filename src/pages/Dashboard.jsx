@@ -58,16 +58,16 @@ function FieldRow({ children }) {
   return <Grid container spacing={2}>{children}</Grid>;
 }
 
-function SectionHeader({ title, right, subtle = false }) {
+function SectionHeader({ title, right, subtle = false, compact = false }) {
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2.5, flexWrap: 'wrap' }}>
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: compact ? 2 : 2.5, flexWrap: 'wrap' }}>
       <Box sx={{
         width: 3,
         height: 18,
         borderRadius: 2,
         bgcolor: subtle ? 'rgba(118,255,3,0.8)' : 'primary.main',
       }} />
-      <Typography variant="h6">{title}</Typography>
+      <Typography variant="h6" sx={{ lineHeight: 1.1 }}>{title}</Typography>
       {right && <Box sx={{ ml: 'auto', display: 'flex', gap: 1, alignItems: 'center' }}>{right}</Box>}
     </Box>
   );
@@ -391,8 +391,17 @@ function Dashboard() {
             {activeTab === 'inventory' && <Grid container spacing={3}>
               {/* Add Car Form */}
               <Grid item xs={12} lg={4}>
-                <Paper sx={{ p: { xs: 2.25, sm: 2.75 }, borderRadius: 3, position: 'sticky', top: 76 }}>
-                  <SectionHeader title="Add New Car" />
+                <Paper sx={{
+                  p: { xs: 2.25, sm: 2.75 },
+                  borderRadius: 3,
+                  position: 'sticky',
+                  top: 76,
+                  bgcolor: 'rgba(20,20,20,0.94)',
+                }}>
+                  <SectionHeader title="Add New Car" compact />
+                  <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 2.25 }}>
+                    Add inventory with complete details and image.
+                  </Typography>
                   <Box component="form" onSubmit={handleAddCar}>
                     <CarFormFields data={form} onChange={setForm} />
                     <Button type="submit" variant="contained" disabled={addLoading} fullWidth
@@ -431,6 +440,7 @@ function Dashboard() {
                       </Tooltip>
                       </>
                     }
+                    compact
                   />
 
                   <Filters filters={filters} onChange={setFilters} brands={brands} />
@@ -501,7 +511,7 @@ function Dashboard() {
                           ) : filteredCars.map((car) => {
                             const days = daysInStock(car.createdAt);
                             return (
-                              <TableRow key={car.id}>
+                              <TableRow key={car.id} sx={{ '& td': { verticalAlign: 'middle' } }}>
                                 <TableCell>
                                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                                     {car.imageUrl && (
@@ -542,18 +552,21 @@ function Dashboard() {
                                     {car.status === 'For Sale' && (
                                       <Tooltip title="Mark as Sold">
                                         <IconButton size="small" color="success" disabled={actionLoading}
+                                          sx={{ '&:hover': { color: '#69f0ae' } }}
                                           onClick={() => setSellDialog({ open: true, carId: car.id, buyerName: '' })}>
                                           <CheckIcon sx={{ fontSize: 16 }} />
                                         </IconButton>
                                       </Tooltip>
                                     )}
                                     <Tooltip title="Edit">
-                                      <IconButton size="small" onClick={() => { setCurrentCar({ ...car, _originalImagePath: car.imagePath || '' }); setIsEditModalOpen(true); }}>
+                                      <IconButton size="small" sx={{ '&:hover': { color: '#76ff03' } }}
+                                        onClick={() => { setCurrentCar({ ...car, _originalImagePath: car.imagePath || '' }); setIsEditModalOpen(true); }}>
                                         <EditIcon sx={{ fontSize: 16 }} />
                                       </IconButton>
                                     </Tooltip>
                                     <Tooltip title="Delete">
                                       <IconButton size="small" color="secondary"
+                                        sx={{ '&:hover': { color: '#f50057' } }}
                                         onClick={() => { setCarToDelete(car); setOpenDeleteDialog(true); }}>
                                         <DeleteIcon sx={{ fontSize: 16 }} />
                                       </IconButton>
@@ -576,13 +589,13 @@ function Dashboard() {
 
       {/* Mark as Sold Dialog */}
       <Dialog open={sellDialog.open} onClose={() => setSellDialog({ open: false, carId: null, buyerName: '' })} maxWidth="xs" fullWidth>
-        <DialogTitle sx={{ fontWeight: 700 }}>Confirm Sale</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 700, borderBottom: '1px solid rgba(255,255,255,0.06)', pb: 1.5 }}>Confirm Sale</DialogTitle>
         <DialogContent>
           <TextField autoFocus fullWidth label="Buyer Name (optional)" margin="normal"
             value={sellDialog.buyerName}
             onChange={e => setSellDialog(s => ({ ...s, buyerName: e.target.value }))} />
         </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
+        <DialogActions sx={{ px: 3, pb: 2, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
           <Button onClick={() => setSellDialog({ open: false, carId: null, buyerName: '' })}>Cancel</Button>
           <Button variant="contained" color="success" onClick={handleMarkSold} disabled={actionLoading}
             sx={{ color: '#000', fontWeight: 700 }}>
@@ -594,12 +607,12 @@ function Dashboard() {
       {/* Edit Modal */}
       <Dialog open={isEditModalOpen} onClose={() => { setIsEditModalOpen(false); setCurrentCar(null); }}
         fullScreen={isMobile} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ fontWeight: 700 }}>Edit Car</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 700, borderBottom: '1px solid rgba(255,255,255,0.06)', pb: 1.5 }}>Edit Car</DialogTitle>
         <Box component="form" onSubmit={handleUpdateCar}>
           <DialogContent sx={{ pt: 1 }}>
             <CarFormFields data={currentCar || {}} onChange={setCurrentCar} isEdit />
           </DialogContent>
-          <DialogActions sx={{ px: 3, pb: 2 }}>
+          <DialogActions sx={{ px: 3, pb: 2, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
             <Button onClick={() => { setIsEditModalOpen(false); setCurrentCar(null); }}>Cancel</Button>
             <Button type="submit" variant="contained" disabled={actionLoading} sx={{ color: '#000', fontWeight: 700 }}>
               {actionLoading ? <CircularProgress size={18} /> : 'Save Changes'}
@@ -610,13 +623,13 @@ function Dashboard() {
 
       {/* Delete Dialog */}
       <Dialog open={openDeleteDialog} onClose={() => { setOpenDeleteDialog(false); setCarToDelete(null); }} maxWidth="xs" fullWidth>
-        <DialogTitle sx={{ fontWeight: 700 }}>Delete Car</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 700, borderBottom: '1px solid rgba(255,255,255,0.06)', pb: 1.5 }}>Delete Car</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Permanently delete <strong>{carToDelete?.brand} {carToDelete?.model}</strong>? This cannot be undone.
           </DialogContentText>
         </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
+        <DialogActions sx={{ px: 3, pb: 2, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
           <Button onClick={() => { setOpenDeleteDialog(false); setCarToDelete(null); }}>Cancel</Button>
           <Button onClick={handleDeleteConfirm} color="secondary" variant="contained" disabled={actionLoading}>
             {actionLoading ? <CircularProgress size={18} /> : 'Delete'}
