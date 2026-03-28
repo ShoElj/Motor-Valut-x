@@ -18,6 +18,7 @@ const BG_INSET   = '#0e0e0e';   // recessed surface (table rows, code blocks)
 const BORDER_SOFT   = 'rgba(255,255,255,0.06)';
 const BORDER_MEDIUM = 'rgba(255,255,255,0.10)';
 const BORDER_FOCUS  = GREEN;
+const BORDER_STRONG = 'rgba(255,255,255,0.14)';
 
 const TEXT_PRIMARY   = '#efefef';
 const TEXT_SECONDARY = '#a0a0a0';
@@ -28,6 +29,8 @@ const RADIUS_SM = 8;
 const RADIUS_MD = 12;
 const RADIUS_LG = 14;
 const RADIUS_XL = 16;
+const SHADOW_SOFT = '0 8px 22px rgba(0,0,0,0.22)';
+const SHADOW_FLOAT = '0 12px 28px rgba(0,0,0,0.32)';
 
 // ─── Theme ────────────────────────────────────────────────────────────────────
 
@@ -131,7 +134,7 @@ const darkTheme = createTheme({
           backgroundColor: BG_PAPER,
           border: `1px solid ${BORDER_SOFT}`,
           borderRadius: RADIUS_LG,
-          boxShadow: '0 8px 28px rgba(0,0,0,0.24)',
+          boxShadow: SHADOW_SOFT,
         },
       },
     },
@@ -141,6 +144,7 @@ const darkTheme = createTheme({
           borderRadius: RADIUS_LG,
           border: `1px solid ${BORDER_SOFT}`,
           backgroundImage: 'none',
+          boxShadow: 'none',
         },
       },
     },
@@ -152,6 +156,20 @@ const darkTheme = createTheme({
         },
       },
     },
+    MuiCardHeader: {
+      styleOverrides: {
+        root: {
+          padding: '18px 20px 10px',
+        },
+        title: {
+          fontWeight: 700,
+          letterSpacing: '-0.01em',
+        },
+        subheader: {
+          color: TEXT_SECONDARY,
+        },
+      },
+    },
 
     // ── Buttons ──────────────────────────────────────────────────────────────
     MuiButton: {
@@ -159,7 +177,7 @@ const darkTheme = createTheme({
       styleOverrides: {
         root: {
           fontWeight: 600,
-          borderRadius: 10,
+          borderRadius: RADIUS_MD,
           letterSpacing: '0.01em',
           transition: 'all 0.18s ease',
           minHeight: 36,
@@ -179,12 +197,12 @@ const darkTheme = createTheme({
           '&.Mui-disabled': { opacity: 0.45 },
         },
         containedPrimary: {
-          background: `linear-gradient(180deg, ${alpha(GREEN, 0.95)} 0%, ${alpha(GREEN, 0.82)} 100%)`,
+          background: `linear-gradient(180deg, ${alpha(GREEN, 0.88)} 0%, ${alpha(GREEN, 0.78)} 100%)`,
           color: '#051102',
-          boxShadow: `0 10px 26px ${alpha(GREEN, 0.24)}`,
+          boxShadow: `0 8px 20px ${alpha(GREEN, 0.2)}`,
           '&:hover': {
-            background: `linear-gradient(180deg, ${alpha(GREEN, 1)} 0%, ${alpha(GREEN, 0.86)} 100%)`,
-            boxShadow: `0 12px 28px ${alpha(GREEN, 0.3)}`,
+            background: `linear-gradient(180deg, ${alpha(GREEN, 0.92)} 0%, ${alpha(GREEN, 0.82)} 100%)`,
+            boxShadow: `0 10px 22px ${alpha(GREEN, 0.24)}`,
           },
         },
         outlined: {
@@ -212,7 +230,7 @@ const darkTheme = createTheme({
           borderRadius: RADIUS_SM,
           border: `1px solid ${alpha('#fff', 0.08)}`,
           backgroundColor: alpha('#fff', 0.02),
-          transition: 'background 0.14s, color 0.14s',
+          transition: 'background 0.14s, color 0.14s, border-color 0.14s',
           '&:hover': {
             backgroundColor: 'rgba(255,255,255,0.07)',
             borderColor: alpha(GREEN, 0.45),
@@ -249,6 +267,7 @@ const darkTheme = createTheme({
           '& fieldset': { borderColor: 'rgba(255,255,255,0.09)', transition: 'border-color 0.15s' },
           '&:hover fieldset': { borderColor: 'rgba(255,255,255,0.2)' },
           '&.Mui-focused fieldset': { borderColor: BORDER_FOCUS, borderWidth: '1.5px' },
+          '&.Mui-error fieldset': { borderColor: RED },
           '&.Mui-disabled': { opacity: 0.5 },
         },
         input: { padding: '8px 12px' },
@@ -338,9 +357,9 @@ const darkTheme = createTheme({
         paper: {
           backgroundImage: 'none',
           backgroundColor: BG_RAISED,
-          border: `1px solid ${BORDER_MEDIUM}`,
+          border: `1px solid ${BORDER_STRONG}`,
           borderRadius: RADIUS_XL,
-          boxShadow: '0 24px 64px rgba(0,0,0,0.6)',
+          boxShadow: SHADOW_FLOAT,
         },
       },
     },
@@ -419,7 +438,7 @@ const darkTheme = createTheme({
           border: `1px solid ${BORDER_MEDIUM}`,
           fontSize: '0.72rem',
           fontWeight: 500,
-          borderRadius: 6,
+          borderRadius: RADIUS_SM,
           padding: '5px 10px',
           color: TEXT_PRIMARY,
           boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
