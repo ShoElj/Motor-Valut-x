@@ -12,23 +12,23 @@ export default function Filters({ filters, onChange, brands }) {
 
   return (
     <Box sx={{
-      mb: 2.5, p: 2, borderRadius: 2,
+      mb: 3, p: { xs: 1.75, sm: 2.25 }, borderRadius: 2,
       bgcolor: 'rgba(255,255,255,0.02)',
       border: '1px solid rgba(255,255,255,0.05)',
     }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
         <Typography sx={{ fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#444' }}>
           Filters
         </Typography>
         {hasFilters && (
           <Button size="small" startIcon={<FilterListOffIcon sx={{ fontSize: 13 }} />}
             onClick={() => onChange(EMPTY)}
-            sx={{ fontSize: '0.72rem', color: '#555', py: 0.25, minHeight: 'unset', '&:hover': { color: '#f50057' } }}>
+            sx={{ fontSize: '0.72rem', color: '#666', py: 0.4, minHeight: 'unset', '&:hover': { color: '#f50057' } }}>
             Clear
           </Button>
         )}
       </Box>
-      <Grid container spacing={1.5}>
+      <Grid container spacing={1.75}>
         <Grid item xs={12} sm={6} md={3}>
           <TextField fullWidth label="Search brand, model, VIN"
             value={filters.search || ''} onChange={set('search')}

@@ -58,25 +58,41 @@ function FieldRow({ children }) {
   return <Grid container spacing={2}>{children}</Grid>;
 }
 
+function SectionHeader({ title, right, subtle = false, compact = false }) {
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: compact ? 2 : 2.5, flexWrap: 'wrap' }}>
+      <Box sx={{
+        width: 3,
+        height: 18,
+        borderRadius: 2,
+        bgcolor: subtle ? 'rgba(118,255,3,0.8)' : 'primary.main',
+      }} />
+      <Typography variant="h6" sx={{ lineHeight: 1.1 }}>{title}</Typography>
+      {right && <Box sx={{ ml: 'auto', display: 'flex', gap: 1, alignItems: 'center' }}>{right}</Box>}
+    </Box>
+  );
+}
+
 function CarFormFields({ data, onChange, isEdit = false }) {
   const set = (key) => (e) => onChange(prev => ({ ...prev, [key]: e.target.value }));
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2.25}>
       <Grid item xs={12}>
         <ImageUpload
           value={{ imageUrl: data.imageUrl || '', imagePath: data.imagePath || '' }}
           onChange={({ imageUrl, imagePath }) => onChange(prev => ({ ...prev, imageUrl, imagePath }))}
+          size="100%"
         />
       </Grid>
-      <Grid item xs={6}><TextField fullWidth label="Brand" value={data.brand || ''} onChange={set('brand')} required /></Grid>
-      <Grid item xs={6}><TextField fullWidth label="Model" value={data.model || ''} onChange={set('model')} required /></Grid>
-      <Grid item xs={6}><TextField fullWidth label="Year" type="number" value={data.year || ''} onChange={set('year')} required /></Grid>
-      <Grid item xs={6}><TextField fullWidth label="Color" value={data.color || ''} onChange={set('color')} /></Grid>
-      <Grid item xs={6}><TextField fullWidth label="Price (₦)" type="number" value={data.price || ''} onChange={set('price')} required /></Grid>
-      <Grid item xs={6}><TextField fullWidth label="Cost Price (₦)" type="number" value={data.costPrice || ''} onChange={set('costPrice')} /></Grid>
-      <Grid item xs={6}><TextField fullWidth label="Mileage (km)" type="number" value={data.mileage || ''} onChange={set('mileage')} /></Grid>
-      <Grid item xs={6}><TextField fullWidth label="VIN" value={data.vin || ''} onChange={set('vin')} /></Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} sm={6}><TextField fullWidth label="Brand" value={data.brand || ''} onChange={set('brand')} required /></Grid>
+      <Grid item xs={12} sm={6}><TextField fullWidth label="Model" value={data.model || ''} onChange={set('model')} required /></Grid>
+      <Grid item xs={12} sm={6}><TextField fullWidth label="Year" type="number" value={data.year || ''} onChange={set('year')} required /></Grid>
+      <Grid item xs={12} sm={6}><TextField fullWidth label="Color" value={data.color || ''} onChange={set('color')} /></Grid>
+      <Grid item xs={12} sm={6}><TextField fullWidth label="Price (₦)" type="number" value={data.price || ''} onChange={set('price')} required /></Grid>
+      <Grid item xs={12} sm={6}><TextField fullWidth label="Cost Price (₦)" type="number" value={data.costPrice || ''} onChange={set('costPrice')} /></Grid>
+      <Grid item xs={12} sm={6}><TextField fullWidth label="Mileage (km)" type="number" value={data.mileage || ''} onChange={set('mileage')} /></Grid>
+      <Grid item xs={12} sm={6}><TextField fullWidth label="VIN" value={data.vin || ''} onChange={set('vin')} /></Grid>
+      <Grid item xs={12} sm={6}>
         <FormControl fullWidth>
           <InputLabel>Condition</InputLabel>
           <Select value={data.condition || 'Tokunbo'} label="Condition" onChange={set('condition')}>
@@ -86,7 +102,7 @@ function CarFormFields({ data, onChange, isEdit = false }) {
           </Select>
         </FormControl>
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} sm={6}>
         <FormControl fullWidth>
           <InputLabel>Transmission</InputLabel>
           <Select value={data.transmission || 'Automatic'} label="Transmission" onChange={set('transmission')}>
@@ -188,7 +204,7 @@ function Dashboard() {
     const oldImagePath = currentCar._originalImagePath || null;
     const imageChanged = oldImagePath && oldImagePath !== currentCar.imagePath;
     try {
-      const { id, createdAt, userId, _originalImagePath, ...data } = currentCar;
+      const { id, createdAt: _createdAt, userId: _userId, _originalImagePath, ...data } = currentCar;
       await updateCar(uid, id, {
         ...data,
         year: Number(data.year),
@@ -376,16 +392,22 @@ function Dashboard() {
             {activeTab === 'inventory' && <Grid container spacing={3}>
               {/* Add Car Form */}
               <Grid item xs={12} lg={4}>
-                <Paper sx={{ p: 3, borderRadius: 3, position: 'sticky', top: 80 }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
-                    <Box sx={{ width: 3, height: 20, bgcolor: 'primary.main', borderRadius: 2 }} />
-                    <Typography variant="h6">Add New Car</Typography>
-                  </Box>
+                <Paper sx={{
+                  p: { xs: 2.25, sm: 2.75 },
+                  borderRadius: 3,
+                  position: 'sticky',
+                  top: 76,
+                  bgcolor: 'rgba(20,20,20,0.94)',
+                }}>
+                  <SectionHeader title="Add New Car" compact />
+                  <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 2.25 }}>
+                    Add inventory with complete details and image.
+                  </Typography>
                   <Box component="form" onSubmit={handleAddCar}>
                     <CarFormFields data={form} onChange={setForm} />
                     <Button type="submit" variant="contained" disabled={addLoading} fullWidth
                       startIcon={addLoading ? null : <AddIcon />}
-                      sx={{ mt: 3, py: 1.25, fontWeight: 700, color: '#000' }}>
+                      sx={{ mt: 2.75, py: 1.35, fontWeight: 700, color: '#000' }}>
                       {addLoading ? <CircularProgress size={20} sx={{ color: '#000' }} /> : 'Add Car'}
                     </Button>
                   </Box>
@@ -394,15 +416,15 @@ function Dashboard() {
 
               {/* Inventory */}
               <Grid item xs={12} lg={8}>
-                <Paper sx={{ p: 3, borderRadius: 3 }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3, flexWrap: 'wrap' }}>
-                    <Box sx={{ width: 3, height: 20, bgcolor: 'primary.main', borderRadius: 2 }} />
-                    <Typography variant="h6">Inventory</Typography>
-                    {!carsLoading && (
-                      <Chip label={`${filteredCars.length} cars`} size="small"
-                        sx={{ bgcolor: 'rgba(255,255,255,0.06)', color: '#888', fontWeight: 600 }} />
-                    )}
-                    <Box sx={{ ml: 'auto', display: 'flex', gap: 1 }}>
+                <Paper sx={{ p: { xs: 2.25, sm: 2.75 }, borderRadius: 3 }}>
+                  <SectionHeader
+                    title="Inventory"
+                    right={
+                      <>
+                        {!carsLoading && (
+                          <Chip label={`${filteredCars.length} cars`} size="small"
+                            sx={{ bgcolor: 'rgba(255,255,255,0.06)', color: '#888', fontWeight: 600 }} />
+                        )}
                       <Tooltip title="Export filtered results to CSV">
                         <Button size="small" startIcon={<DownloadIcon sx={{ fontSize: 15 }} />}
                           onClick={() => exportToCSV(filteredCars, 'inventory-filtered.csv')}
@@ -417,8 +439,10 @@ function Dashboard() {
                           All
                         </Button>
                       </Tooltip>
-                    </Box>
-                  </Box>
+                      </>
+                    }
+                    compact
+                  />
 
                   <Filters filters={filters} onChange={setFilters} brands={brands} />
 
@@ -431,7 +455,7 @@ function Dashboard() {
                     ) : filteredCars.map((car) => {
                       const days = daysInStock(car.createdAt);
                       return (
-                        <Paper key={car.id} sx={{ p: 2, mb: 2, borderRadius: 2 }}>
+                        <Paper key={car.id} sx={{ p: 2.25, mb: 2, borderRadius: 2 }}>
                           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 0.5 }}>
                             <Box>
                               <Typography variant="subtitle1" sx={{ fontWeight: 700, lineHeight: 1.2 }}>{car.brand} {car.model}</Typography>
@@ -465,8 +489,8 @@ function Dashboard() {
                       );
                     })
                   ) : (
-                    <TableContainer>
-                      <Table>
+                    <TableContainer sx={{ border: '1px solid rgba(255,255,255,0.05)' }}>
+                      <Table sx={{ '& .MuiTableRow-root:last-of-type .MuiTableCell-root': { borderBottom: 0 } }}>
                         <TableHead>
                           <TableRow>
                             <TableCell>Vehicle</TableCell>
@@ -488,7 +512,7 @@ function Dashboard() {
                           ) : filteredCars.map((car) => {
                             const days = daysInStock(car.createdAt);
                             return (
-                              <TableRow key={car.id}>
+                              <TableRow key={car.id} sx={{ '& td': { verticalAlign: 'middle', py: 1.75 }, '&:hover': { backgroundColor: 'rgba(255,255,255,0.028)' } }}>
                                 <TableCell>
                                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                                     {car.imageUrl && (
@@ -524,23 +548,26 @@ function Dashboard() {
                                   <Chip label={car.status || 'For Sale'} color={car.status === 'Sold' ? 'secondary' : 'success'} size="small" />
                                 </TableCell>
                                 <TableCell align="right">
-                                  <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 0.5 }}>
+                                  <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 0.75 }}>
                                     <ShareListing car={car} />
                                     {car.status === 'For Sale' && (
                                       <Tooltip title="Mark as Sold">
                                         <IconButton size="small" color="success" disabled={actionLoading}
+                                          sx={{ width: 34, height: 34, bgcolor: 'rgba(105,240,174,0.06)', borderColor: 'rgba(105,240,174,0.2)', '&:hover': { color: '#69f0ae', bgcolor: 'rgba(105,240,174,0.12)' } }}
                                           onClick={() => setSellDialog({ open: true, carId: car.id, buyerName: '' })}>
                                           <CheckIcon sx={{ fontSize: 16 }} />
                                         </IconButton>
                                       </Tooltip>
                                     )}
                                     <Tooltip title="Edit">
-                                      <IconButton size="small" onClick={() => { setCurrentCar({ ...car, _originalImagePath: car.imagePath || '' }); setIsEditModalOpen(true); }}>
+                                      <IconButton size="small" sx={{ width: 34, height: 34, bgcolor: 'rgba(118,255,3,0.05)', borderColor: 'rgba(118,255,3,0.18)', '&:hover': { color: '#76ff03', bgcolor: 'rgba(118,255,3,0.12)' } }}
+                                        onClick={() => { setCurrentCar({ ...car, _originalImagePath: car.imagePath || '' }); setIsEditModalOpen(true); }}>
                                         <EditIcon sx={{ fontSize: 16 }} />
                                       </IconButton>
                                     </Tooltip>
                                     <Tooltip title="Delete">
                                       <IconButton size="small" color="secondary"
+                                        sx={{ width: 34, height: 34, bgcolor: 'rgba(245,0,87,0.06)', borderColor: 'rgba(245,0,87,0.2)', '&:hover': { color: '#f50057', bgcolor: 'rgba(245,0,87,0.12)' } }}
                                         onClick={() => { setCarToDelete(car); setOpenDeleteDialog(true); }}>
                                         <DeleteIcon sx={{ fontSize: 16 }} />
                                       </IconButton>
@@ -563,13 +590,13 @@ function Dashboard() {
 
       {/* Mark as Sold Dialog */}
       <Dialog open={sellDialog.open} onClose={() => setSellDialog({ open: false, carId: null, buyerName: '' })} maxWidth="xs" fullWidth>
-        <DialogTitle sx={{ fontWeight: 700 }}>Confirm Sale</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 700, borderBottom: '1px solid rgba(255,255,255,0.06)', pb: 1.5 }}>Confirm Sale</DialogTitle>
         <DialogContent>
           <TextField autoFocus fullWidth label="Buyer Name (optional)" margin="normal"
             value={sellDialog.buyerName}
             onChange={e => setSellDialog(s => ({ ...s, buyerName: e.target.value }))} />
         </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
+        <DialogActions sx={{ px: 3, pb: 2, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
           <Button onClick={() => setSellDialog({ open: false, carId: null, buyerName: '' })}>Cancel</Button>
           <Button variant="contained" color="success" onClick={handleMarkSold} disabled={actionLoading}
             sx={{ color: '#000', fontWeight: 700 }}>
@@ -580,13 +607,13 @@ function Dashboard() {
 
       {/* Edit Modal */}
       <Dialog open={isEditModalOpen} onClose={() => { setIsEditModalOpen(false); setCurrentCar(null); }}
-        fullScreen={isMobile} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ fontWeight: 700 }}>Edit Car</DialogTitle>
+        fullScreen={isMobile} maxWidth="md" fullWidth>
+        <DialogTitle sx={{ fontWeight: 700, borderBottom: '1px solid rgba(255,255,255,0.06)', pb: 1.5 }}>Edit Car</DialogTitle>
         <Box component="form" onSubmit={handleUpdateCar}>
-          <DialogContent sx={{ pt: 1 }}>
+          <DialogContent sx={{ pt: 1.5 }}>
             <CarFormFields data={currentCar || {}} onChange={setCurrentCar} isEdit />
           </DialogContent>
-          <DialogActions sx={{ px: 3, pb: 2 }}>
+          <DialogActions sx={{ px: 3, pb: 2.25, pt: 1.25, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
             <Button onClick={() => { setIsEditModalOpen(false); setCurrentCar(null); }}>Cancel</Button>
             <Button type="submit" variant="contained" disabled={actionLoading} sx={{ color: '#000', fontWeight: 700 }}>
               {actionLoading ? <CircularProgress size={18} /> : 'Save Changes'}
@@ -597,13 +624,13 @@ function Dashboard() {
 
       {/* Delete Dialog */}
       <Dialog open={openDeleteDialog} onClose={() => { setOpenDeleteDialog(false); setCarToDelete(null); }} maxWidth="xs" fullWidth>
-        <DialogTitle sx={{ fontWeight: 700 }}>Delete Car</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 700, borderBottom: '1px solid rgba(255,255,255,0.06)', pb: 1.5 }}>Delete Car</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Permanently delete <strong>{carToDelete?.brand} {carToDelete?.model}</strong>? This cannot be undone.
           </DialogContentText>
         </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
+        <DialogActions sx={{ px: 3, pb: 2, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
           <Button onClick={() => { setOpenDeleteDialog(false); setCarToDelete(null); }}>Cancel</Button>
           <Button onClick={handleDeleteConfirm} color="secondary" variant="contained" disabled={actionLoading}>
             {actionLoading ? <CircularProgress size={18} /> : 'Delete'}
