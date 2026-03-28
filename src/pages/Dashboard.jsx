@@ -58,6 +58,21 @@ function FieldRow({ children }) {
   return <Grid container spacing={2}>{children}</Grid>;
 }
 
+function SectionHeader({ title, right, subtle = false }) {
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2.5, flexWrap: 'wrap' }}>
+      <Box sx={{
+        width: 3,
+        height: 18,
+        borderRadius: 2,
+        bgcolor: subtle ? 'rgba(118,255,3,0.8)' : 'primary.main',
+      }} />
+      <Typography variant="h6">{title}</Typography>
+      {right && <Box sx={{ ml: 'auto', display: 'flex', gap: 1, alignItems: 'center' }}>{right}</Box>}
+    </Box>
+  );
+}
+
 function CarFormFields({ data, onChange, isEdit = false }) {
   const set = (key) => (e) => onChange(prev => ({ ...prev, [key]: e.target.value }));
   return (
@@ -188,7 +203,7 @@ function Dashboard() {
     const oldImagePath = currentCar._originalImagePath || null;
     const imageChanged = oldImagePath && oldImagePath !== currentCar.imagePath;
     try {
-      const { id, createdAt, userId, _originalImagePath, ...data } = currentCar;
+      const { id, createdAt: _createdAt, userId: _userId, _originalImagePath, ...data } = currentCar;
       await updateCar(uid, id, {
         ...data,
         year: Number(data.year),
@@ -376,16 +391,13 @@ function Dashboard() {
             {activeTab === 'inventory' && <Grid container spacing={3}>
               {/* Add Car Form */}
               <Grid item xs={12} lg={4}>
-                <Paper sx={{ p: 3, borderRadius: 3, position: 'sticky', top: 80 }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
-                    <Box sx={{ width: 3, height: 20, bgcolor: 'primary.main', borderRadius: 2 }} />
-                    <Typography variant="h6">Add New Car</Typography>
-                  </Box>
+                <Paper sx={{ p: { xs: 2.25, sm: 2.75 }, borderRadius: 3, position: 'sticky', top: 76 }}>
+                  <SectionHeader title="Add New Car" />
                   <Box component="form" onSubmit={handleAddCar}>
                     <CarFormFields data={form} onChange={setForm} />
                     <Button type="submit" variant="contained" disabled={addLoading} fullWidth
                       startIcon={addLoading ? null : <AddIcon />}
-                      sx={{ mt: 3, py: 1.25, fontWeight: 700, color: '#000' }}>
+                      sx={{ mt: 2.5, py: 1.25, fontWeight: 700, color: '#000' }}>
                       {addLoading ? <CircularProgress size={20} sx={{ color: '#000' }} /> : 'Add Car'}
                     </Button>
                   </Box>
@@ -394,15 +406,15 @@ function Dashboard() {
 
               {/* Inventory */}
               <Grid item xs={12} lg={8}>
-                <Paper sx={{ p: 3, borderRadius: 3 }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3, flexWrap: 'wrap' }}>
-                    <Box sx={{ width: 3, height: 20, bgcolor: 'primary.main', borderRadius: 2 }} />
-                    <Typography variant="h6">Inventory</Typography>
-                    {!carsLoading && (
-                      <Chip label={`${filteredCars.length} cars`} size="small"
-                        sx={{ bgcolor: 'rgba(255,255,255,0.06)', color: '#888', fontWeight: 600 }} />
-                    )}
-                    <Box sx={{ ml: 'auto', display: 'flex', gap: 1 }}>
+                <Paper sx={{ p: { xs: 2.25, sm: 2.75 }, borderRadius: 3 }}>
+                  <SectionHeader
+                    title="Inventory"
+                    right={
+                      <>
+                        {!carsLoading && (
+                          <Chip label={`${filteredCars.length} cars`} size="small"
+                            sx={{ bgcolor: 'rgba(255,255,255,0.06)', color: '#888', fontWeight: 600 }} />
+                        )}
                       <Tooltip title="Export filtered results to CSV">
                         <Button size="small" startIcon={<DownloadIcon sx={{ fontSize: 15 }} />}
                           onClick={() => exportToCSV(filteredCars, 'inventory-filtered.csv')}
@@ -417,8 +429,9 @@ function Dashboard() {
                           All
                         </Button>
                       </Tooltip>
-                    </Box>
-                  </Box>
+                      </>
+                    }
+                  />
 
                   <Filters filters={filters} onChange={setFilters} brands={brands} />
 
@@ -431,7 +444,7 @@ function Dashboard() {
                     ) : filteredCars.map((car) => {
                       const days = daysInStock(car.createdAt);
                       return (
-                        <Paper key={car.id} sx={{ p: 2, mb: 2, borderRadius: 2 }}>
+                        <Paper key={car.id} sx={{ p: 2.25, mb: 2, borderRadius: 2 }}>
                           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 0.5 }}>
                             <Box>
                               <Typography variant="subtitle1" sx={{ fontWeight: 700, lineHeight: 1.2 }}>{car.brand} {car.model}</Typography>
@@ -465,8 +478,8 @@ function Dashboard() {
                       );
                     })
                   ) : (
-                    <TableContainer>
-                      <Table>
+                    <TableContainer sx={{ border: '1px solid rgba(255,255,255,0.05)' }}>
+                      <Table sx={{ '& .MuiTableRow-root:last-of-type .MuiTableCell-root': { borderBottom: 0 } }}>
                         <TableHead>
                           <TableRow>
                             <TableCell>Vehicle</TableCell>
@@ -524,7 +537,7 @@ function Dashboard() {
                                   <Chip label={car.status || 'For Sale'} color={car.status === 'Sold' ? 'secondary' : 'success'} size="small" />
                                 </TableCell>
                                 <TableCell align="right">
-                                  <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 0.5 }}>
+                                  <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 0.75 }}>
                                     <ShareListing car={car} />
                                     {car.status === 'For Sale' && (
                                       <Tooltip title="Mark as Sold">

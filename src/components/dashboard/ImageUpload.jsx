@@ -78,7 +78,7 @@ export default function ImageUpload({ value, onChange, disabled = false, size = 
           bgcolor: dragging ? 'rgba(118,255,3,0.04)' : '#0e0e0e',
           overflow: 'hidden',
           cursor: disabled || uploading ? 'default' : 'pointer',
-          transition: 'border-color 0.18s, background 0.18s, box-shadow 0.18s',
+          transition: 'border-color 0.18s, background 0.18s, box-shadow 0.18s, transform 0.18s',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -86,6 +86,7 @@ export default function ImageUpload({ value, onChange, disabled = false, size = 
             borderColor: '#76ff03',
             bgcolor: 'rgba(118,255,3,0.025)',
             boxShadow: '0 0 0 3px rgba(118,255,3,0.05)',
+            transform: 'translateY(-1px)',
           } : {},
         }}
       >
@@ -130,7 +131,7 @@ export default function ImageUpload({ value, onChange, disabled = false, size = 
             <Typography sx={{ fontSize: '0.78rem', fontWeight: 600, color: '#bbb', display: 'block', lineHeight: 1.3 }}>
               {uploading ? 'Uploading…' : 'Upload Vehicle Image'}
             </Typography>
-            <Typography sx={{ fontSize: '0.65rem', color: '#444', display: 'block', mt: 0.5 }}>
+            <Typography sx={{ fontSize: '0.67rem', color: '#666', display: 'block', mt: 0.5 }}>
               JPG, PNG, WEBP · Max 5MB
             </Typography>
           </Box>

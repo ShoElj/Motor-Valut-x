@@ -5,6 +5,7 @@ import SellIcon from '@mui/icons-material/Sell';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 
 const CARDS = [
   { key: 'total',          label: 'Total Cars',      Icon: DirectionsCarIcon,        color: '#76ff03' },
@@ -14,7 +15,8 @@ const CARDS = [
   { key: 'totalRevenue',   label: 'Total Revenue',   Icon: TrendingUpIcon,           color: '#40c4ff', currency: true },
 ];
 
-function StatCard({ label, value, Icon, color, loading }) {
+function StatCard({ label, value, icon, color, loading }) {
+  const IconComponent = icon;
   return (
     <Paper sx={{
       p: { xs: 2, sm: 2.5 },
@@ -49,7 +51,7 @@ function StatCard({ label, value, Icon, color, loading }) {
         color,
         flexShrink: 0,
       }}>
-        <Icon sx={{ fontSize: 18 }} />
+        <IconComponent sx={{ fontSize: 18 }} />
       </Box>
 
       {/* Label */}
@@ -85,18 +87,31 @@ function StatCard({ label, value, Icon, color, loading }) {
 
 export default function StatsCards({ stats, loading = false }) {
   return (
-    <Grid container spacing={2} sx={{ mb: 3 }}>
-      {CARDS.map(({ key, label, Icon, color, currency }) => (
-        <Grid item xs={6} sm={4} md={2.4} key={key}>
-          <StatCard
-            label={label}
-            Icon={Icon}
-            color={color}
-            loading={loading}
-            value={currency ? `₦${(stats[key] || 0).toLocaleString()}` : stats[key] ?? 0}
-          />
-        </Grid>
-      ))}
-    </Grid>
+    <>
+      <Box sx={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 1,
+        mb: 1.75,
+      }}>
+        <AutoGraphIcon sx={{ fontSize: 18, color: '#76ff03' }} />
+        <Typography variant="subtitle2" sx={{ textTransform: 'uppercase', letterSpacing: '0.08em', color: 'text.secondary' }}>
+          Inventory Snapshot
+        </Typography>
+      </Box>
+      <Grid container spacing={{ xs: 1.5, md: 2 }} sx={{ mb: 3.5 }}>
+        {CARDS.map(({ key, label, Icon, color, currency }) => (
+          <Grid item xs={12} sm={6} md={4} lg={2.4} key={key}>
+            <StatCard
+              label={label}
+              icon={Icon}
+              color={color}
+              loading={loading}
+              value={currency ? `₦${(stats[key] || 0).toLocaleString()}` : stats[key] ?? 0}
+            />
+          </Grid>
+        ))}
+      </Grid>
+    </>
   );
 }
