@@ -18,11 +18,19 @@ const BG_INSET   = '#0e0e0e';   // recessed surface (table rows, code blocks)
 const BORDER_SOFT   = 'rgba(255,255,255,0.06)';
 const BORDER_MEDIUM = 'rgba(255,255,255,0.10)';
 const BORDER_FOCUS  = GREEN;
+const BORDER_STRONG = 'rgba(255,255,255,0.14)';
 
 const TEXT_PRIMARY   = '#efefef';
-const TEXT_SECONDARY = '#888';
-const TEXT_MUTED     = '#555';
+const TEXT_SECONDARY = '#a0a0a0';
+const TEXT_MUTED     = '#757575';
 const TEXT_FAINT     = '#333';
+
+const RADIUS_SM = 8;
+const RADIUS_MD = 12;
+const RADIUS_LG = 14;
+const RADIUS_XL = 16;
+const SHADOW_SOFT = '0 8px 22px rgba(0,0,0,0.22)';
+const SHADOW_FLOAT = '0 12px 28px rgba(0,0,0,0.32)';
 
 // ─── Theme ────────────────────────────────────────────────────────────────────
 
@@ -43,7 +51,7 @@ const darkTheme = createTheme({
     },
   },
 
-  shape: { borderRadius: 10 },
+  shape: { borderRadius: RADIUS_MD },
   spacing: 8,
 
   // ── Typography ──────────────────────────────────────────────────────────────
@@ -76,6 +84,11 @@ const darkTheme = createTheme({
       letterSpacing: '0.12em',
       textTransform: 'uppercase',
       color: TEXT_MUTED,
+    },
+    button: {
+      fontWeight: 600,
+      letterSpacing: '0.02em',
+      textTransform: 'none',
     },
   },
 
@@ -120,7 +133,40 @@ const darkTheme = createTheme({
           backgroundImage: 'none',
           backgroundColor: BG_PAPER,
           border: `1px solid ${BORDER_SOFT}`,
-          borderRadius: 12,
+          borderRadius: RADIUS_LG,
+          boxShadow: SHADOW_SOFT,
+        },
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: RADIUS_LG,
+          border: `1px solid ${BORDER_SOFT}`,
+          backgroundImage: 'none',
+          boxShadow: 'none',
+        },
+      },
+    },
+    MuiCardContent: {
+      styleOverrides: {
+        root: {
+          padding: 20,
+          '&:last-child': { paddingBottom: 20 },
+        },
+      },
+    },
+    MuiCardHeader: {
+      styleOverrides: {
+        root: {
+          padding: '18px 20px 10px',
+        },
+        title: {
+          fontWeight: 700,
+          letterSpacing: '-0.01em',
+        },
+        subheader: {
+          color: TEXT_SECONDARY,
         },
       },
     },
@@ -130,12 +176,12 @@ const darkTheme = createTheme({
       defaultProps: { disableElevation: true },
       styleOverrides: {
         root: {
-          textTransform: 'none',
           fontWeight: 600,
-          borderRadius: 8,
+          borderRadius: RADIUS_MD,
           letterSpacing: '0.01em',
-          transition: 'all 0.15s ease',
+          transition: 'all 0.18s ease',
           minHeight: 36,
+          paddingInline: 16,
         },
         sizeSmall:  { fontSize: '0.78rem', padding: '5px 12px',  minHeight: 30 },
         sizeMedium: { fontSize: '0.85rem', padding: '7px 16px',  minHeight: 36 },
@@ -150,8 +196,18 @@ const darkTheme = createTheme({
           '&:active': { transform: 'translateY(0)', boxShadow: 'none' },
           '&.Mui-disabled': { opacity: 0.45 },
         },
+        containedPrimary: {
+          background: `linear-gradient(180deg, ${alpha(GREEN, 0.88)} 0%, ${alpha(GREEN, 0.78)} 100%)`,
+          color: '#051102',
+          boxShadow: `0 8px 20px ${alpha(GREEN, 0.2)}`,
+          '&:hover': {
+            background: `linear-gradient(180deg, ${alpha(GREEN, 0.92)} 0%, ${alpha(GREEN, 0.82)} 100%)`,
+            boxShadow: `0 10px 22px ${alpha(GREEN, 0.24)}`,
+          },
+        },
         outlined: {
           borderColor: BORDER_MEDIUM,
+          backgroundColor: alpha('#fff', 0.01),
           '&:hover': {
             borderColor: GREEN,
             backgroundColor: alpha(GREEN, 0.05),
@@ -171,13 +227,31 @@ const darkTheme = createTheme({
     MuiIconButton: {
       styleOverrides: {
         root: {
-          borderRadius: 8,
-          transition: 'background 0.14s, color 0.14s',
-          '&:hover': { backgroundColor: 'rgba(255,255,255,0.07)' },
+          borderRadius: RADIUS_SM,
+          border: `1px solid ${alpha('#fff', 0.08)}`,
+          backgroundColor: alpha('#fff', 0.02),
+          transition: 'background 0.14s, color 0.14s, border-color 0.14s',
+          '&:hover': {
+            backgroundColor: 'rgba(255,255,255,0.07)',
+            borderColor: alpha(GREEN, 0.45),
+          },
           '&.Mui-disabled': { opacity: 0.35 },
         },
         sizeSmall:  { padding: 6 },
         sizeMedium: { padding: 8 },
+      },
+    },
+    MuiAvatar: {
+      styleOverrides: {
+        root: {
+          borderRadius: RADIUS_SM,
+          backgroundColor: alpha('#fff', 0.03),
+          border: `1px solid ${alpha('#fff', 0.08)}`,
+          color: TEXT_SECONDARY,
+          width: 32,
+          height: 32,
+          fontSize: '0.9rem',
+        },
       },
     },
 
@@ -188,11 +262,12 @@ const darkTheme = createTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          borderRadius: 8,
+          borderRadius: RADIUS_SM,
           fontSize: '0.875rem',
           '& fieldset': { borderColor: 'rgba(255,255,255,0.09)', transition: 'border-color 0.15s' },
           '&:hover fieldset': { borderColor: 'rgba(255,255,255,0.2)' },
           '&.Mui-focused fieldset': { borderColor: BORDER_FOCUS, borderWidth: '1.5px' },
+          '&.Mui-error fieldset': { borderColor: RED },
           '&.Mui-disabled': { opacity: 0.5 },
         },
         input: { padding: '8px 12px' },
@@ -210,7 +285,7 @@ const darkTheme = createTheme({
     },
     MuiSelect: {
       styleOverrides: {
-        root: { borderRadius: 8, fontSize: '0.875rem' },
+        root: { borderRadius: RADIUS_SM, fontSize: '0.875rem' },
         select: { padding: '7px 12px' },
       },
     },
@@ -258,7 +333,7 @@ const darkTheme = createTheme({
     },
     MuiTableContainer: {
       styleOverrides: {
-        root: { borderRadius: 10, overflow: 'hidden' },
+        root: { borderRadius: RADIUS_MD, overflow: 'hidden' },
       },
     },
 
@@ -268,7 +343,7 @@ const darkTheme = createTheme({
         root: {
           fontWeight: 600,
           fontSize: '0.68rem',
-          borderRadius: 6,
+          borderRadius: RADIUS_SM,
           height: 22,
           letterSpacing: '0.02em',
         },
@@ -282,9 +357,9 @@ const darkTheme = createTheme({
         paper: {
           backgroundImage: 'none',
           backgroundColor: BG_RAISED,
-          border: `1px solid ${BORDER_MEDIUM}`,
-          borderRadius: 14,
-          boxShadow: '0 24px 64px rgba(0,0,0,0.6)',
+          border: `1px solid ${BORDER_STRONG}`,
+          borderRadius: RADIUS_XL,
+          boxShadow: SHADOW_FLOAT,
         },
       },
     },
@@ -338,7 +413,7 @@ const darkTheme = createTheme({
     MuiAlert: {
       styleOverrides: {
         root: {
-          borderRadius: 10,
+          borderRadius: RADIUS_MD,
           fontSize: '0.85rem',
           alignItems: 'center',
         },
@@ -363,7 +438,7 @@ const darkTheme = createTheme({
           border: `1px solid ${BORDER_MEDIUM}`,
           fontSize: '0.72rem',
           fontWeight: 500,
-          borderRadius: 6,
+          borderRadius: RADIUS_SM,
           padding: '5px 10px',
           color: TEXT_PRIMARY,
           boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
@@ -394,7 +469,7 @@ const darkTheme = createTheme({
         root: {
           backgroundColor: '#222',
           border: `1px solid ${BORDER_MEDIUM}`,
-          borderRadius: 10,
+          borderRadius: RADIUS_MD,
           fontSize: '0.82rem',
           color: TEXT_PRIMARY,
           boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
@@ -405,7 +480,29 @@ const darkTheme = createTheme({
     // ── List ─────────────────────────────────────────────────────────────────
     MuiListItem: {
       styleOverrides: {
-        root: { borderRadius: 8 },
+        root: { borderRadius: RADIUS_SM },
+      },
+    },
+
+    // ── Typography rhythm / section headings ────────────────────────────────
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          textWrap: 'pretty',
+        },
+        h5: {
+          letterSpacing: '-0.02em',
+          marginBottom: 4,
+        },
+        h6: {
+          letterSpacing: '-0.01em',
+          marginBottom: 4,
+          color: TEXT_PRIMARY,
+        },
+        subtitle2: {
+          color: TEXT_SECONDARY,
+          letterSpacing: '0.02em',
+        },
       },
     },
   },
