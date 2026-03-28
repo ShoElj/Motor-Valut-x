@@ -84,8 +84,8 @@ export default function ImageUpload({ value, onChange, disabled = false, size = 
           justifyContent: 'center',
           '&:hover': !disabled && !uploading && !previewUrl ? {
             borderColor: '#76ff03',
-            bgcolor: 'rgba(118,255,3,0.03)',
-            boxShadow: '0 0 0 3px rgba(118,255,3,0.06)',
+            bgcolor: 'rgba(118,255,3,0.025)',
+            boxShadow: '0 0 0 3px rgba(118,255,3,0.05)',
             transform: 'translateY(-1px)',
           } : {},
         }}

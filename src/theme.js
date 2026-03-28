@@ -21,18 +21,14 @@ const BORDER_FOCUS  = GREEN;
 const BORDER_STRONG = 'rgba(255,255,255,0.14)';
 
 const TEXT_PRIMARY   = '#efefef';
-const TEXT_SECONDARY = '#adadad';
-const TEXT_MUTED     = '#858585';
+const TEXT_SECONDARY = '#a0a0a0';
+const TEXT_MUTED     = '#757575';
 const TEXT_FAINT     = '#333';
 
 const RADIUS_SM = 8;
 const RADIUS_MD = 12;
 const RADIUS_LG = 14;
 const RADIUS_XL = 16;
-const SPACE_1 = 8;
-const SPACE_2 = 12;
-const SPACE_3 = 16;
-const SPACE_4 = 20;
 const SHADOW_SOFT = '0 8px 22px rgba(0,0,0,0.22)';
 const SHADOW_FLOAT = '0 12px 28px rgba(0,0,0,0.32)';
 
@@ -155,8 +151,8 @@ const darkTheme = createTheme({
     MuiCardContent: {
       styleOverrides: {
         root: {
-          padding: SPACE_4,
-          '&:last-child': { paddingBottom: SPACE_4 },
+          padding: 20,
+          '&:last-child': { paddingBottom: 20 },
         },
       },
     },
@@ -185,7 +181,7 @@ const darkTheme = createTheme({
           letterSpacing: '0.01em',
           transition: 'all 0.18s ease',
           minHeight: 36,
-          paddingInline: SPACE_3,
+          paddingInline: 16,
         },
         sizeSmall:  { fontSize: '0.78rem', padding: '5px 12px',  minHeight: 30 },
         sizeMedium: { fontSize: '0.85rem', padding: `${SPACE_1 - 1}px ${SPACE_3}px`,  minHeight: 36 },
@@ -243,6 +239,19 @@ const darkTheme = createTheme({
         },
         sizeSmall:  { padding: SPACE_1 - 2 },
         sizeMedium: { padding: SPACE_1 },
+      },
+    },
+    MuiAvatar: {
+      styleOverrides: {
+        root: {
+          borderRadius: RADIUS_SM,
+          backgroundColor: alpha('#fff', 0.03),
+          border: `1px solid ${alpha('#fff', 0.08)}`,
+          color: TEXT_SECONDARY,
+          width: 32,
+          height: 32,
+          fontSize: '0.9rem',
+        },
       },
     },
     MuiAvatar: {

@@ -408,7 +408,7 @@ function Dashboard() {
                     <CarFormFields data={form} onChange={setForm} />
                     <Button type="submit" variant="contained" disabled={addLoading} fullWidth
                       startIcon={addLoading ? null : <AddIcon />}
-                      sx={{ mt: 2.75, py: 1.35, fontWeight: 700, color: '#000' }}>
+                      sx={{ mt: 2.5, py: 1.25, fontWeight: 700, color: '#000' }}>
                       {addLoading ? <CircularProgress size={20} sx={{ color: '#000' }} /> : 'Add Car'}
                     </Button>
                   </Box>
@@ -513,7 +513,7 @@ function Dashboard() {
                           ) : filteredCars.map((car) => {
                             const days = daysInStock(car.createdAt);
                             return (
-                              <TableRow key={car.id} sx={{ '& td': { verticalAlign: 'middle', py: 1.75 }, '&:hover': { backgroundColor: 'rgba(255,255,255,0.028)' } }}>
+                              <TableRow key={car.id} sx={{ '& td': { verticalAlign: 'middle' } }}>
                                 <TableCell>
                                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                                     {car.imageUrl && (
@@ -554,21 +554,21 @@ function Dashboard() {
                                     {car.status === 'For Sale' && (
                                       <Tooltip title="Mark as Sold">
                                         <IconButton size="small" color="success" disabled={actionLoading}
-                                          sx={{ width: 34, height: 34, bgcolor: 'rgba(105,240,174,0.06)', borderColor: 'rgba(105,240,174,0.2)', '&:hover': { color: '#69f0ae', bgcolor: 'rgba(105,240,174,0.12)' } }}
+                                          sx={{ '&:hover': { color: '#69f0ae' } }}
                                           onClick={() => setSellDialog({ open: true, carId: car.id, buyerName: '' })}>
                                           <CheckIcon sx={{ fontSize: 16 }} />
                                         </IconButton>
                                       </Tooltip>
                                     )}
                                     <Tooltip title="Edit">
-                                      <IconButton size="small" sx={{ width: 34, height: 34, bgcolor: 'rgba(118,255,3,0.05)', borderColor: 'rgba(118,255,3,0.18)', '&:hover': { color: '#76ff03', bgcolor: 'rgba(118,255,3,0.12)' } }}
+                                      <IconButton size="small" sx={{ '&:hover': { color: '#76ff03' } }}
                                         onClick={() => { setCurrentCar({ ...car, _originalImagePath: car.imagePath || '' }); setIsEditModalOpen(true); }}>
                                         <EditIcon sx={{ fontSize: 16 }} />
                                       </IconButton>
                                     </Tooltip>
                                     <Tooltip title="Delete">
                                       <IconButton size="small" color="secondary"
-                                        sx={{ width: 34, height: 34, bgcolor: 'rgba(245,0,87,0.06)', borderColor: 'rgba(245,0,87,0.2)', '&:hover': { color: '#f50057', bgcolor: 'rgba(245,0,87,0.12)' } }}
+                                        sx={{ '&:hover': { color: '#f50057' } }}
                                         onClick={() => { setCarToDelete(car); setOpenDeleteDialog(true); }}>
                                         <DeleteIcon sx={{ fontSize: 16 }} />
                                       </IconButton>
@@ -608,13 +608,13 @@ function Dashboard() {
 
       {/* Edit Modal */}
       <Dialog open={isEditModalOpen} onClose={() => { setIsEditModalOpen(false); setCurrentCar(null); }}
-        fullScreen={isMobile} maxWidth="md" fullWidth>
+        fullScreen={isMobile} maxWidth="sm" fullWidth>
         <DialogTitle sx={{ fontWeight: 700, borderBottom: '1px solid rgba(255,255,255,0.06)', pb: 1.5 }}>Edit Car</DialogTitle>
         <Box component="form" onSubmit={handleUpdateCar}>
           <DialogContent sx={{ pt: 1.5 }}>
             <CarFormFields data={currentCar || {}} onChange={setCurrentCar} isEdit />
           </DialogContent>
-          <DialogActions sx={{ px: 3, pb: 2.25, pt: 1.25, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+          <DialogActions sx={{ px: 3, pb: 2, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
             <Button onClick={() => { setIsEditModalOpen(false); setCurrentCar(null); }}>Cancel</Button>
             <Button type="submit" variant="contained" disabled={actionLoading} sx={{ color: '#000', fontWeight: 700 }}>
               {actionLoading ? <CircularProgress size={18} /> : 'Save Changes'}

@@ -21,7 +21,7 @@ function StatCard({ label, value, icon, color, loading }) {
     <Paper sx={{
       p: { xs: 2.25, sm: 2.75 },
       height: '100%',
-      minHeight: { xs: 132, sm: 142 },
+      minHeight: { xs: 116, sm: 124 },
       position: 'relative',
       overflow: 'hidden',
       transition: 'transform 0.2s, box-shadow 0.2s, border-color 0.2s',
@@ -53,7 +53,7 @@ function StatCard({ label, value, icon, color, loading }) {
         color,
         flexShrink: 0,
       }}>
-        <IconComponent sx={{ fontSize: 19 }} />
+        <IconComponent sx={{ fontSize: 18 }} />
       </Box>
 
       {/* Label */}
@@ -101,7 +101,7 @@ export default function StatsCards({ stats, loading = false }) {
           Inventory Snapshot
         </Typography>
       </Box>
-      <Grid container spacing={{ xs: 1.75, md: 2.25 }} sx={{ mb: 3.5 }}>
+      <Grid container spacing={{ xs: 1.5, md: 2 }} sx={{ mb: 3.25 }}>
         {CARDS.map(({ key, label, Icon, color, currency }) => (
           <Grid item xs={12} sm={6} md={4} lg={2.4} key={key}>
             <StatCard
