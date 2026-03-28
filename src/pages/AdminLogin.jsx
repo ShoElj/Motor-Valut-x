@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebase/config';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { login } from '../services/authService';
 
 import { Box, Button, TextField, Typography, Container, Paper, Alert, ThemeProvider, CssBaseline } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -19,7 +18,7 @@ function AdminLogin() {
     setError('');
     setLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await login(email, password);
       navigate('/dashboard');
     } catch {
       setError('Failed to sign in. Please check your email and password.');
@@ -32,52 +31,27 @@ function AdminLogin() {
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <Box sx={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
         backgroundImage: 'url(https://images.unsplash.com/photo-1553440569-bcc63803a83d?q=80&w=1925&auto=format&fit=crop)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        backgroundSize: 'cover', backgroundPosition: 'center',
       }}>
         <Container component="main" maxWidth="xs">
           <Paper elevation={12} sx={{
-            padding: 4,
-            borderRadius: 4,
-            backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            padding: 4, borderRadius: 4, backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(0,0,0,0.5)',
+            display: 'flex', flexDirection: 'column', alignItems: 'center',
           }}>
             <LockOutlinedIcon sx={{ fontSize: 40, mb: 1, color: 'primary.main' }} />
             <Typography component="h1" variant="h4" sx={{ fontWeight: 'bold' }}>
               Motor<span style={{ color: darkTheme.palette.primary.main }}>Vault</span>
             </Typography>
-            <Typography component="h2" variant="subtitle1" sx={{ color: 'rgba(255, 255, 255, 0.7)', mt: 1 }}>
-              Admin Panel
-            </Typography>
+            <Typography variant="subtitle1" sx={{ color: 'rgba(255,255,255,0.7)', mt: 1 }}>Admin Panel</Typography>
             <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3, width: '100%' }}>
-              <TextField
-                margin="normal" required fullWidth id="email" label="Email Address"
-                name="email" autoComplete="email" autoFocus
-                value={email} onChange={(e) => setEmail(e.target.value)}
-              />
-              <TextField
-                margin="normal" required fullWidth name="password" label="Password"
-                type="password" id="password" autoComplete="current-password"
-                value={password} onChange={(e) => setPassword(e.target.value)}
-              />
-              {error && (
-                <Alert severity="error" sx={{ mt: 2, width: '100%', bgcolor: 'rgba(211, 47, 47, 0.25)' }}>
-                  {error}
-                </Alert>
-              )}
-              <Button
-                type="submit" fullWidth variant="contained" disabled={loading}
-                sx={{ mt: 3, mb: 2, py: 1.5, fontSize: '1rem', fontWeight: 'bold', color: '#000', '&:hover': { bgcolor: '#9cff57' } }}
-              >
+              <TextField margin="normal" required fullWidth label="Email Address" autoComplete="email" autoFocus value={email} onChange={e => setEmail(e.target.value)} />
+              <TextField margin="normal" required fullWidth label="Password" type="password" autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} />
+              {error && <Alert severity="error" sx={{ mt: 2, bgcolor: 'rgba(211,47,47,0.25)' }}>{error}</Alert>}
+              <Button type="submit" fullWidth variant="contained" disabled={loading}
+                sx={{ mt: 3, mb: 2, py: 1.5, fontWeight: 'bold', color: '#000', '&:hover': { bgcolor: '#9cff57' } }}>
                 {loading ? 'Signing In...' : 'Sign In'}
               </Button>
             </Box>

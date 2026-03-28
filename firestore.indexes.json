@@ -1,0 +1,8 @@
+{
+  "collectionGroup": "cars",
+  "queryScope": "COLLECTION",
+  "fields": [
+    { "fieldPath": "status", "order": "ASCENDING" },
+    { "fieldPath": "brand", "order": "ASCENDING" }
+  ]
+}
