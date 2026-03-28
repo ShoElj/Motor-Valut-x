@@ -5,80 +5,86 @@ import SellIcon from '@mui/icons-material/Sell';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 
 const CARDS = [
-  { key: 'total',          label: 'Total Cars',      Icon: DirectionsCarIcon,        color: '#76ff03' },
+  { key: 'total',          label: 'Total',           Icon: DirectionsCarIcon,        color: '#76ff03' },
   { key: 'available',      label: 'Available',       Icon: SellIcon,                 color: '#69f0ae' },
   { key: 'sold',           label: 'Sold',            Icon: CheckCircleIcon,          color: '#f50057' },
-  { key: 'inventoryValue', label: 'Inventory Value', Icon: AccountBalanceWalletIcon, color: '#ffab40', currency: true },
-  { key: 'totalRevenue',   label: 'Total Revenue',   Icon: TrendingUpIcon,           color: '#40c4ff', currency: true },
+  { key: 'inventoryValue', label: 'Stock Value',     Icon: AccountBalanceWalletIcon, color: '#ffab40', currency: true },
+  { key: 'totalRevenue',   label: 'Revenue',         Icon: TrendingUpIcon,           color: '#40c4ff', currency: true },
 ];
 
-function StatCard({ label, value, icon, color, loading }) {
-  const IconComponent = icon;
+function StatCard({ label, value, Icon, color, loading }) {
   return (
     <Paper sx={{
-      p: { xs: 2.25, sm: 2.75 },
+      p: { xs: 1.75, sm: 2.5 },
       height: '100%',
-      minHeight: { xs: 116, sm: 124 },
       position: 'relative',
       overflow: 'hidden',
-      transition: 'transform 0.2s, box-shadow 0.2s, border-color 0.2s',
+      transition: 'transform 0.18s, box-shadow 0.18s, border-color 0.18s',
       '&:hover': {
-        transform: 'translateY(-3px)',
-        boxShadow: `0 12px 30px ${color}20`,
-        borderColor: `${color}30`,
+        transform: 'translateY(-2px)',
+        boxShadow: `0 10px 28px ${color}18`,
+        borderColor: `${color}28`,
       },
-      // Subtle top accent line on hover
       '&::after': {
         content: '""',
         position: 'absolute',
-        top: 0, left: '20%', right: '20%',
+        top: 0, left: '15%', right: '15%',
         height: '1.5px',
-        background: `linear-gradient(90deg, transparent, ${color}88, transparent)`,
+        background: `linear-gradient(90deg, transparent, ${color}77, transparent)`,
         opacity: 0,
         transition: 'opacity 0.18s',
       },
       '&:hover::after': { opacity: 1 },
     }}>
-      {/* Icon — top right */}
+      {/* Icon — top right, smaller on mobile */}
       <Box sx={{
-        position: 'absolute', top: 14, right: 14,
-        width: 40, height: 40, borderRadius: '12px',
-        bgcolor: `${color}14`,
-        border: `1px solid ${color}30`,
-        boxShadow: `inset 0 0 0 1px ${color}1f, 0 4px 16px ${color}20`,
+        position: 'absolute',
+        top: { xs: 10, sm: 14 },
+        right: { xs: 10, sm: 14 },
+        width: { xs: 28, sm: 36 },
+        height: { xs: 28, sm: 36 },
+        borderRadius: '9px',
+        bgcolor: `${color}12`,
+        border: `1px solid ${color}28`,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        color,
-        flexShrink: 0,
+        color, flexShrink: 0,
       }}>
-        <IconComponent sx={{ fontSize: 18 }} />
+        <Icon sx={{ fontSize: { xs: 14, sm: 17 } }} />
       </Box>
 
-      {/* Label */}
+      {/* Label — shorter on mobile via CARDS data */}
       <Typography sx={{
-        fontSize: '0.67rem',
+        fontSize: '0.62rem',
         fontWeight: 700,
         textTransform: 'uppercase',
-        letterSpacing: '0.1em',
+        letterSpacing: '0.09em',
         color: 'text.secondary',
-        mb: 1.5,
-        pr: 5, // avoid overlap with icon
+        mb: { xs: 1, sm: 1.5 },
+        pr: { xs: 4, sm: 5 },
+        lineHeight: 1.2,
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
       }}>
         {label}
       </Typography>
 
       {/* Value */}
       {loading ? (
-        <Skeleton variant="text" width="60%" height={38} sx={{ mt: 0.5 }} />
+        <Skeleton variant="text" width="55%" height={32} />
       ) : (
         <Typography sx={{
-          fontSize: { xs: '1.5rem', sm: '1.78rem' },
-          fontWeight: 900,
+          fontSize: { xs: '1.2rem', sm: '1.6rem' },
+          fontWeight: 800,
           lineHeight: 1,
           color: '#efefef',
           letterSpacing: '-0.03em',
+          // Prevent overflow on very narrow cards
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
         }}>
           {value}
         </Typography>
@@ -89,31 +95,18 @@ function StatCard({ label, value, icon, color, loading }) {
 
 export default function StatsCards({ stats, loading = false }) {
   return (
-    <>
-      <Box sx={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 1,
-        mb: 1.75,
-      }}>
-        <AutoGraphIcon sx={{ fontSize: 18, color: '#76ff03' }} />
-        <Typography variant="subtitle2" sx={{ textTransform: 'uppercase', letterSpacing: '0.08em', color: 'text.secondary' }}>
-          Inventory Snapshot
-        </Typography>
-      </Box>
-      <Grid container spacing={{ xs: 1.5, md: 2 }} sx={{ mb: 3.25 }}>
-        {CARDS.map(({ key, label, Icon, color, currency }) => (
-          <Grid item xs={12} sm={6} md={4} lg={2.4} key={key}>
-            <StatCard
-              label={label}
-              icon={Icon}
-              color={color}
-              loading={loading}
-              value={currency ? `₦${(stats[key] || 0).toLocaleString()}` : stats[key] ?? 0}
-            />
-          </Grid>
-        ))}
-      </Grid>
-    </>
+    <Grid container spacing={{ xs: 1.25, sm: 2 }} sx={{ mb: { xs: 2.5, sm: 3 } }}>
+      {CARDS.map(({ key, label, Icon, color, currency }) => (
+        <Grid item xs={6} sm={4} md={4} lg={2.4} key={key}>
+          <StatCard
+            label={label}
+            Icon={Icon}
+            color={color}
+            loading={loading}
+            value={currency ? `₦${(stats[key] || 0).toLocaleString()}` : stats[key] ?? 0}
+          />
+        </Grid>
+      ))}
+    </Grid>
   );
 }

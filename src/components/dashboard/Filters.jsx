@@ -11,30 +11,51 @@ export default function Filters({ filters, onChange, brands }) {
   const hasFilters = Object.values(filters).some(v => v !== '' && v !== undefined);
 
   return (
-    <Box sx={{
-      mb: 3, p: { xs: 1.75, sm: 2.25 }, borderRadius: 2,
-      bgcolor: 'rgba(255,255,255,0.02)',
-      border: '1px solid rgba(255,255,255,0.05)',
-    }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
-        <Typography sx={{ fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#444' }}>
-          Filters
-        </Typography>
-        {hasFilters && (
-          <Button size="small" startIcon={<FilterListOffIcon sx={{ fontSize: 13 }} />}
+    <Box sx={{ mb: 2.5 }}>
+      {/* Only show the label row when filters are active — reduces visual noise otherwise */}
+      {hasFilters && (
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.25 }}>
+          <Typography sx={{
+            fontSize: '0.62rem', fontWeight: 700,
+            textTransform: 'uppercase', letterSpacing: '0.1em',
+            color: '#444',
+          }}>
+            Filters active
+          </Typography>
+          <Button
+            size="small"
+            startIcon={<FilterListOffIcon sx={{ fontSize: 12 }} />}
             onClick={() => onChange(EMPTY)}
-            sx={{ fontSize: '0.72rem', color: '#666', py: 0.4, minHeight: 'unset', '&:hover': { color: '#f50057' } }}>
-            Clear
+            sx={{
+              fontSize: '0.7rem', color: '#555',
+              py: 0.25, minHeight: 'unset',
+              '&:hover': { color: '#f50057' },
+            }}
+          >
+            Clear all
           </Button>
-        )}
-      </Box>
-      <Grid container spacing={1.75}>
+        </Box>
+      )}
+
+      <Grid container spacing={{ xs: 1.25, sm: 1.5 }}>
+        {/* Search — full width on mobile */}
         <Grid item xs={12} sm={6} md={3}>
-          <TextField fullWidth label="Search brand, model, VIN"
-            value={filters.search || ''} onChange={set('search')}
-            InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon sx={{ fontSize: 15, color: '#444' }} /></InputAdornment> }}
+          <TextField
+            fullWidth
+            label="Search brand, model, VIN"
+            value={filters.search || ''}
+            onChange={set('search')}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon sx={{ fontSize: 14, color: '#444' }} />
+                </InputAdornment>
+              ),
+            }}
           />
         </Grid>
+
+        {/* Status + Condition side by side on mobile */}
         <Grid item xs={6} sm={3} md={2}>
           <FormControl fullWidth>
             <InputLabel>Status</InputLabel>
@@ -56,6 +77,8 @@ export default function Filters({ filters, onChange, brands }) {
             </Select>
           </FormControl>
         </Grid>
+
+        {/* Brand */}
         <Grid item xs={6} sm={3} md={2}>
           <FormControl fullWidth>
             <InputLabel>Brand</InputLabel>
@@ -65,6 +88,8 @@ export default function Filters({ filters, onChange, brands }) {
             </Select>
           </FormControl>
         </Grid>
+
+        {/* Price range */}
         <Grid item xs={6} sm={3} md={1.5}>
           <TextField fullWidth label="Min ₦" type="number" value={filters.minPrice || ''} onChange={set('minPrice')} />
         </Grid>

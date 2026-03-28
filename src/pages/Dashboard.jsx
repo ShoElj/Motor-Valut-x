@@ -19,7 +19,7 @@ import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress,
   ThemeProvider, CssBaseline, IconButton, Dialog, DialogActions, DialogContent,
   DialogContentText, DialogTitle, Select, MenuItem, FormControl, InputLabel, Chip,
-  Drawer, useMediaQuery, Divider, Tooltip, Skeleton
+  Drawer, useMediaQuery, Tooltip, Skeleton
 } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -450,43 +450,76 @@ function Dashboard() {
                   {isMobile ? (
                     carsLoading ? <MobileCardSkeleton /> :
                     filteredCars.length === 0 ? (
-                      <Box sx={{ textAlign: 'center', py: 8 }}>
-                        <Typography color="text.secondary" variant="body2">No cars match your filters.</Typography>
+                      <Box sx={{ textAlign: 'center', py: 7 }}>
+                        <Typography sx={{ color: '#444', fontSize: '0.85rem' }}>No cars match your filters.</Typography>
                       </Box>
                     ) : filteredCars.map((car) => {
                       const days = daysInStock(car.createdAt);
                       return (
-                        <Paper key={car.id} sx={{ p: 2.25, mb: 2, borderRadius: 2 }}>
-                          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 0.5 }}>
-                            <Box>
-                              <Typography variant="subtitle1" sx={{ fontWeight: 700, lineHeight: 1.2 }}>{car.brand} {car.model}</Typography>
-                              <Typography variant="caption" color="text.secondary">{car.year} • {car.condition}</Typography>
-                            </Box>
-                            <Chip label={car.status || 'For Sale'} color={car.status === 'Sold' ? 'secondary' : 'success'} size="small" />
-                          </Box>
-                          {days !== null && car.status === 'For Sale' && (
-                            <Typography variant="caption" sx={{ color: agingColor(days), display: 'block', mb: 0.5 }}>{days}d in stock</Typography>
+                        <Box key={car.id} sx={{
+                          display: 'flex', gap: 1.5,
+                          p: 1.75, mb: 1.25,
+                          borderRadius: 2,
+                          bgcolor: 'rgba(255,255,255,0.02)',
+                          border: '1px solid rgba(255,255,255,0.05)',
+                        }}>
+                          {/* Thumbnail */}
+                          {car.imageUrl ? (
+                            <Box component="img" src={car.imageUrl} alt=""
+                              sx={{ width: 52, height: 52, objectFit: 'cover', borderRadius: 1.5, flexShrink: 0, alignSelf: 'flex-start' }} />
+                          ) : (
+                            <Box sx={{ width: 52, height: 52, borderRadius: 1.5, bgcolor: 'rgba(255,255,255,0.04)', flexShrink: 0, alignSelf: 'flex-start' }} />
                           )}
-                          <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
-                            {car.status === 'Sold'
-                              ? <span style={{ textDecoration: 'line-through', color: '#555' }}>₦{car.price?.toLocaleString()}</span>
-                              : `₦${car.price?.toLocaleString()}`}
-                          </Typography>
-                          <Divider sx={{ mb: 1 }} />
-                          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
-                            {car.status === 'For Sale' && (
-                              <Button size="small" variant="contained" color="success" startIcon={<CheckIcon />}
-                                onClick={() => setSellDialog({ open: true, carId: car.id, buyerName: '' })}
-                                disabled={actionLoading} sx={{ color: '#000' }}>
-                                Sold
-                              </Button>
-                            )}
-                            <Button size="small" startIcon={<EditIcon />}
-                              onClick={() => { setCurrentCar({ ...car, _originalImagePath: car.imagePath || '' }); setIsEditModalOpen(true); }}>Edit</Button>
-                            <Button size="small" color="secondary" startIcon={<DeleteIcon />}
-                              onClick={() => { setCarToDelete(car); setOpenDeleteDialog(true); }}>Delete</Button>
+
+                          {/* Content */}
+                          <Box sx={{ flex: 1, minWidth: 0 }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 0.25 }}>
+                              <Typography sx={{ fontWeight: 700, fontSize: '0.88rem', lineHeight: 1.2, color: '#e0e0e0' }}>
+                                {car.brand} {car.model}
+                              </Typography>
+                              <Chip label={car.status || 'For Sale'} color={car.status === 'Sold' ? 'secondary' : 'success'} size="small" sx={{ ml: 1, flexShrink: 0 }} />
+                            </Box>
+
+                            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>
+                              {car.year} · {car.condition}
+                              {days !== null && car.status === 'For Sale' && (
+                                <Box component="span" sx={{ color: agingColor(days), ml: 0.75 }}>{days}d</Box>
+                              )}
+                            </Typography>
+
+                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                              <Typography sx={{ fontWeight: 700, fontSize: '0.92rem', color: car.status === 'Sold' ? '#555' : '#efefef',
+                                textDecoration: car.status === 'Sold' ? 'line-through' : 'none' }}>
+                                ₦{car.price?.toLocaleString()}
+                              </Typography>
+
+                              {/* Icon-only action buttons */}
+                              <Box sx={{ display: 'flex', gap: 0.5 }}>
+                                <ShareListing car={car} />
+                                {car.status === 'For Sale' && (
+                                  <Tooltip title="Mark as Sold">
+                                    <IconButton size="small" color="success" disabled={actionLoading}
+                                      onClick={() => setSellDialog({ open: true, carId: car.id, buyerName: '' })}>
+                                      <CheckIcon sx={{ fontSize: 15 }} />
+                                    </IconButton>
+                                  </Tooltip>
+                                )}
+                                <Tooltip title="Edit">
+                                  <IconButton size="small"
+                                    onClick={() => { setCurrentCar({ ...car, _originalImagePath: car.imagePath || '' }); setIsEditModalOpen(true); }}>
+                                    <EditIcon sx={{ fontSize: 15 }} />
+                                  </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Delete">
+                                  <IconButton size="small" color="secondary"
+                                    onClick={() => { setCarToDelete(car); setOpenDeleteDialog(true); }}>
+                                    <DeleteIcon sx={{ fontSize: 15 }} />
+                                  </IconButton>
+                                </Tooltip>
+                              </Box>
+                            </Box>
                           </Box>
-                        </Paper>
+                        </Box>
                       );
                     })
                   ) : (
