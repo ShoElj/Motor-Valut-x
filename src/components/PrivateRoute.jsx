@@ -8,7 +8,13 @@ const PrivateRoute = ({ children }) => {
 
   if (loading) {
     return (
-      <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#1a1a1a' }}>
+      <Box sx={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        bgcolor: 'background.default',
+      }}>
         <CircularProgress />
       </Box>
     );

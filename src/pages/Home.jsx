@@ -686,47 +686,37 @@ export default function Home() {
 
           <Box sx={{ py: { xs: 11, md: 16 } }}>
             <Container maxWidth="xl" sx={{ px: { xs: 3, md: 6 } }}>
-              <Box sx={{ mb: 7.5, maxWidth: 860 }}>
-                <Typography
-                  sx={{
-                    fontSize: '0.72rem',
-                    fontWeight: 700,
-                    color: '#76ff03',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.14em',
-                    display: 'block',
-                    mb: 2,
-                  }}
-                >
-                  Core Features
-                </Typography>
 
-                <Typography
-                  sx={{
-                    color: '#efefef',
-                    mb: 1.75,
-                    lineHeight: 1.1,
-                    fontSize: { xs: '2rem', md: '3rem' },
-                    fontWeight: 800,
-                    letterSpacing: '-0.04em',
-                    maxWidth: 760,
-                  }}
-                >
-                  Everything a modern dealership needs to stay in control
-                </Typography>
+              {/* Section intro — full width, then cards below */}
+              <Grid container spacing={3.5} sx={{ mb: 6 }}>
+                <Grid item xs={12} md={6}>
+                  <Typography sx={{
+                    fontSize: '0.72rem', fontWeight: 700, color: '#76ff03',
+                    textTransform: 'uppercase', letterSpacing: '0.14em',
+                    display: 'block', mb: 2,
+                  }}>
+                    Core Features
+                  </Typography>
+                  <Typography sx={{
+                    color: '#efefef', lineHeight: 1.12,
+                    fontSize: { xs: '1.8rem', md: '2.4rem' },
+                    fontWeight: 800, letterSpacing: '-0.03em',
+                  }}>
+                    Everything a modern dealership needs to stay in control
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} md={6} sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                  <Typography sx={{
+                    color: 'rgba(255,255,255,0.55)',
+                    lineHeight: 1.8, fontSize: '0.97rem',
+                    pb: { md: 0.5 },
+                  }}>
+                    MotorVault brings inventory, sales, media, and reporting into one focused dealership workflow.
+                  </Typography>
+                </Grid>
+              </Grid>
 
-                <Typography
-                  sx={{
-                    color: 'rgba(255,255,255,0.58)',
-                    lineHeight: 1.85,
-                    fontSize: '1rem',
-                    maxWidth: 620,
-                  }}
-                >
-                  MotorVault brings inventory, sales, media, and reporting into one focused dealership workflow.
-                </Typography>
-              </Box>
-
+              {/* Feature cards — same spacing as intro grid */}
               <Grid container spacing={3.5}>
                 {FEATURES.map((feature, index) => (
                   <Grid item xs={12} md={6} key={feature.title}>
@@ -737,143 +727,93 @@ export default function Home() {
             </Container>
           </Box>
 
-          <Box
-            sx={{
-              py: { xs: 11, md: 16 },
-              bgcolor: '#080808',
-              borderTop: '1px solid rgba(255,255,255,0.05)',
-              borderBottom: '1px solid rgba(255,255,255,0.05)',
-            }}
-          >
+          <Box sx={{
+            py: { xs: 11, md: 16 },
+            bgcolor: '#080808',
+            borderTop: '1px solid rgba(255,255,255,0.05)',
+            borderBottom: '1px solid rgba(255,255,255,0.05)',
+          }}>
             <Container maxWidth="xl" sx={{ px: { xs: 3, md: 6 } }}>
-              <Grid container spacing={{ xs: 7, md: 8 }} alignItems="flex-start">
-                <Grid item xs={12} md={5}>
-                  <Typography
-                    sx={{
-                      fontSize: '0.72rem',
-                      fontWeight: 700,
-                      color: '#76ff03',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.14em',
-                      display: 'block',
-                      mb: 2,
-                    }}
-                  >
+
+              {/* Section intro — same grid as benefit cards */}
+              <Grid container spacing={2.25} sx={{ mb: 5 }}>
+                <Grid item xs={12} md={6}>
+                  <Typography sx={{
+                    fontSize: '0.72rem', fontWeight: 700, color: '#76ff03',
+                    textTransform: 'uppercase', letterSpacing: '0.14em',
+                    display: 'block', mb: 2,
+                  }}>
                     Why MotorVault
                   </Typography>
-
-                  <Typography
-                    sx={{
-                      color: '#efefef',
-                      mb: 2.5,
-                      lineHeight: 1.12,
-                      fontSize: { xs: '2rem', md: '2.8rem' },
-                      fontWeight: 800,
-                      letterSpacing: '-0.04em',
-                    }}
-                  >
+                  <Typography sx={{
+                    color: '#efefef', lineHeight: 1.12,
+                    fontSize: { xs: '1.8rem', md: '2.4rem' },
+                    fontWeight: 800, letterSpacing: '-0.03em', mb: 2,
+                  }}>
                     Built for dealerships that need clarity, speed, and control
                   </Typography>
-
-                  <Typography
-                    sx={{
-                      color: 'rgba(255,255,255,0.56)',
-                      lineHeight: 1.85,
-                      fontSize: '1rem',
-                      mb: 4,
-                      maxWidth: 470,
-                    }}
-                  >
+                  <Typography sx={{
+                    color: 'rgba(255,255,255,0.55)',
+                    lineHeight: 1.8, fontSize: '0.97rem', mb: 3.5, maxWidth: 440,
+                  }}>
                     MotorVault helps dealership teams manage stock, sales, and day-to-day workflow with less clutter and better visibility.
                   </Typography>
-
                   <Button
-                    component={Link}
-                    to="/admin"
-                    variant="outlined"
+                    component={Link} to="/admin" variant="outlined"
                     endIcon={<ArrowForwardIcon sx={{ fontSize: 16 }} />}
                     sx={{
-                      px: 3,
-                      py: 1.25,
-                      fontWeight: 600,
-                      fontSize: '0.9rem',
-                      borderColor: 'rgba(255,255,255,0.1)',
-                      color: '#aaa',
-                      '&:hover': {
-                        borderColor: '#76ff03',
-                        color: '#76ff03',
-                        bgcolor: 'rgba(118,255,3,0.04)',
-                      },
+                      px: 3, py: 1.25, fontWeight: 600, fontSize: '0.9rem',
+                      borderColor: 'rgba(255,255,255,0.1)', color: '#aaa',
+                      '&:hover': { borderColor: '#76ff03', color: '#76ff03', bgcolor: 'rgba(118,255,3,0.04)' },
                     }}
                   >
                     Get started free
                   </Button>
                 </Grid>
+              </Grid>
 
-                <Grid item xs={12} md={7}>
-                  <Grid container spacing={2.25}>
-                    {WHY_ITEMS.map(({ title, body }) => (
-                      <Grid item xs={12} sm={6} key={title}>
-                        <Box
-                          sx={{
-                            p: 3.5,
-                            borderRadius: 4,
-                            bgcolor: '#0f0f0f',
-                            border: '1px solid rgba(255,255,255,0.07)',
-                            height: '100%',
-                            boxShadow: '0 8px 28px rgba(0,0,0,0.22)',
-                            transition: 'border-color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.2s',
-                            '&:hover': {
-                              borderColor: 'rgba(118,255,3,0.22)',
-                              bgcolor: 'rgba(118,255,3,0.025)',
-                              boxShadow:
-                                '0 12px 36px rgba(0,0,0,0.35), 0 0 0 1px rgba(118,255,3,0.08)',
-                              transform: 'translateY(-3px)',
-                            },
-                          }}
-                        >
-                          <Box
-                            sx={{
-                              width: 34,
-                              height: 34,
-                              borderRadius: '10px',
-                              bgcolor: 'rgba(118,255,3,0.09)',
-                              border: '1px solid rgba(118,255,3,0.18)',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              mb: 2.25,
-                            }}
-                          >
-                            <CheckIcon sx={{ fontSize: 15, color: '#76ff03' }} />
-                          </Box>
-
-                          <Typography
-                            sx={{
-                              fontWeight: 700,
-                              fontSize: '0.94rem',
-                              color: '#e2e2e2',
-                              mb: 1.2,
-                              lineHeight: 1.3,
-                            }}
-                          >
-                            {title}
-                          </Typography>
-
-                          <Typography
-                            sx={{
-                              color: 'rgba(255,255,255,0.5)',
-                              fontSize: '0.86rem',
-                              lineHeight: 1.8,
-                            }}
-                          >
-                            {body}
-                          </Typography>
-                        </Box>
-                      </Grid>
-                    ))}
+              {/* Benefit cards — same spacing as intro */}
+              <Grid container spacing={2.25}>
+                {WHY_ITEMS.map(({ title, body }) => (
+                  <Grid item xs={12} sm={6} md={3} key={title}>
+                    <Box sx={{
+                      p: 3, borderRadius: 3,
+                      bgcolor: '#0f0f0f',
+                      border: '1px solid rgba(255,255,255,0.07)',
+                      height: '100%',
+                      boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+                      transition: 'border-color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.2s',
+                      '&:hover': {
+                        borderColor: 'rgba(118,255,3,0.22)',
+                        bgcolor: 'rgba(118,255,3,0.025)',
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px rgba(118,255,3,0.08)',
+                        transform: 'translateY(-3px)',
+                      },
+                    }}>
+                      <Box sx={{
+                        width: 32, height: 32, borderRadius: '9px',
+                        bgcolor: 'rgba(118,255,3,0.09)',
+                        border: '1px solid rgba(118,255,3,0.18)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        mb: 2,
+                      }}>
+                        <CheckIcon sx={{ fontSize: 14, color: '#76ff03' }} />
+                      </Box>
+                      <Typography sx={{
+                        fontWeight: 700, fontSize: '0.9rem',
+                        color: '#e2e2e2', mb: 1, lineHeight: 1.3,
+                      }}>
+                        {title}
+                      </Typography>
+                      <Typography sx={{
+                        color: 'rgba(255,255,255,0.5)',
+                        fontSize: '0.84rem', lineHeight: 1.75,
+                      }}>
+                        {body}
+                      </Typography>
+                    </Box>
                   </Grid>
-                </Grid>
+                ))}
               </Grid>
             </Container>
           </Box>
